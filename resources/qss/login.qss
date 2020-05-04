@@ -1,0 +1,49 @@
+#content_frame{
+background-color: rgba(255,255,255,0.1);
+border-top-left-radius:10px;
+border-top-right-radius:10px;
+border-bottom-left-radius:10px;
+border-bottom-right-radius:10px;
+}
+#main_content{
+background-color: rgba(255,255,255,1);
+}
+
+#main_content>#userName{
+background-color: rgba(255,255,255,0.99);
+color:black;
+border-width:1px;
+border-left-color:#FFFFFF;
+border-right-color:#FFFFFF;
+border-top-color:#FFFFFF;
+border-bottom-color:#999999;
+border-style:solid;
+content:["aaa"];
+}
+#main_content>#userPsw{
+background-color: rgba(255,255,255,0.99);
+color:black;
+border-width:1px;
+border-left-color:#FFFFFF;
+border-right-color:#FFFFFF;
+border-top-color:#FFFFFF;
+border-bottom-color:#999999;
+border-style:solid;
+}
+#main_content>#textLogin{
+color:#697B8C;
+font-size:24px;
+}
+#loginBtn{
+background-color:rgba(20,20,20,0.5);
+color:white;
+border-bottom-left-radius:5px;
+border-bottom-right-radius:5px;
+}
+#loginBtn:hover{
+background-color:rgba(20,20,20,0.8);
+}
+#loginBtn>#loginBtn_text{
+color:white;
+font-size:17px;
+}

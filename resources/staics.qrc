@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/">
+        <file>img/icon_close.png</file>
+        <file>img/icon_remove.png</file>
+        <file>img/logo.png</file>
+        <file>qss/common.qss</file>
+        <file>qss/login.qss</file>
+    </qresource>
+</RCC>
