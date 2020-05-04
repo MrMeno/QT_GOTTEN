@@ -1,0 +1,2 @@
+# QT_GOTTEN
+QT5 C++
