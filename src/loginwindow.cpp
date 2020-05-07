@@ -10,6 +10,8 @@
 #include <iterator>
 #include <qdebug.h>
 #include "util/HttpUtil.h"
+#include <QRegExp>
+#include <QValidator>
 LoginWindow::LoginWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::LoginWindow)
@@ -27,9 +29,13 @@ LoginWindow::LoginWindow(QWidget *parent) :
     ui->content_frame->setGraphicsEffect(shadowEffect);
     ui->userName->setPlaceholderText("请输入用户名");
     ui->userPsw->setPlaceholderText("请输入密码");
-    ui->loginBtn->installEventFilter(this);
+     QRegExp regxPW("^[\\S]*$");
+     QValidator *pwvalidator = new QRegExpValidator(regxPW, this );
+     ui->userPsw->setValidator(pwvalidator);
+      ui->userPsw->setEchoMode(QLineEdit::Password);
+     ui->loginBtn->installEventFilter(this);
      ui->icon_min->installEventFilter(this);
-     this->pos();
+     QObject::connect(ui->userPsw,SIGNAL(QLineEdit::enter(QKeyEvent *event)),this,SLOT(slot_login_keydown(QKeyEvent *event)));
 }
 void LoginWindow::mousePressEvent(QMouseEvent *event){
     //当鼠标左键点击时.
@@ -62,6 +68,18 @@ void LoginWindow::mouseReleaseEvent(QMouseEvent *event)
     }
 }
 
+void LoginWindow::httpLogin(){
+    QString userName=ui->userName->text();
+    QString userPSW=ui->userPsw->text();
+    QJsonObject *LoginDTO =new QJsonObject();
+    LoginDTO->insert("userNo",userName.trimmed());
+    LoginDTO->insert("userPass",userPSW.trimmed());
+    HttpUtil *http=new HttpUtil();
+    http->put(QUrl("/login"), LoginDTO,[=](QJsonObject res){
+        qDebug() << "login-code:" << "success";
+        qDebug() << res;
+    });
+}
 bool LoginWindow::eventFilter(QObject *obj, QEvent *event)
 {
     if (obj == ui->loginBtn)//指定某个QLabel
@@ -71,18 +89,7 @@ bool LoginWindow::eventFilter(QObject *obj, QEvent *event)
              QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event); // 事件转换
              if(mouseEvent->button() == Qt::LeftButton)
              {
-                QString userName=ui->userName->text();
-                QString userPSW=ui->userPsw->text();
-                QJsonObject *LoginDTO =new QJsonObject();
-                LoginDTO->insert("userNo",userName.trimmed());
-                LoginDTO->insert("userPass",userPSW.trimmed());
-                HttpUtil *http=new HttpUtil();
-                http->put(QUrl("/login"), LoginDTO,[=](QJsonObject res){
-                    qDebug() << "login-code:" << "success";
-                    qDebug() << res;
-
-
-                });
+                 httpLogin();
                  return true;
              }
              else
@@ -117,7 +124,14 @@ bool LoginWindow::eventFilter(QObject *obj, QEvent *event)
      }
      return false;
 }
-
+void LoginWindow::enter(QKeyEvent *event){
+   if(event->key()==Qt::Key_Enter){
+       emit slot_login_keydown(event);
+   }
+}
+ void LoginWindow::slot_login_keydown(QKeyEvent *event){
+    httpLogin();
+}
 
  LoginWindow::~LoginWindow()
 {

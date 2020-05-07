@@ -4,9 +4,9 @@
 #include <QMainWindow>
 #include <QMouseEvent>
 #include "components/close_label_btn.h"
+#include <QKeyEvent>
 #include <functional>
-class Mylabel;
-class QLabel;
+#include <QLineEdit>
 namespace Ui {//所有窗体对象都放在ui命名空间内
 class LoginWindow;//声明登录窗体类
 }
@@ -23,6 +23,7 @@ public:
     //它的作用是表明该构造函数是显示的, 而非隐式的, 跟它相对应的另一个关键字是implicit,
     //意思是隐藏的,类构造函数默认情况下即声明为implicit(隐式).
     bool eventFilter(QObject *obj, QEvent *event);
+    void httpLogin();
      //HttpUtil *https=new HttpUtil(this);
     ~LoginWindow();//析构函数,释放函数时执行
 private:
@@ -35,10 +36,15 @@ private:
     //2、A->B则A为指针，->是成员提取，A->B是提取A中的成员B，A只能是指向类、结构、联合的指针；
     //3、::是作用域运算符，A::B表示作用域A中的名称B，A可以是名字空间、类、结构；
     //4、:一般用来表示继承；
+signals:
+       void enter(QKeyEvent *event);
+public slots:
+        void slot_login_keydown(QKeyEvent *event);
 protected:
         void mousePressEvent(QMouseEvent *event);
         void mouseMoveEvent(QMouseEvent *event);
         void mouseReleaseEvent(QMouseEvent *event);
+
 };
 
 

@@ -17,13 +17,14 @@ QStringList PublicHelper::getDirName(QString path)
    }
    dir.setFilter(QDir::Files | QDir::NoSymLinks);
    QStringList filters;
-   filters << "*.bmp" << "*.qss";
+   filters <<"*.qss";
    dir.setNameFilters(filters);
    QStringList list = dir.entryList();
    if (list.count() <= 0)
    {
        return QStringList("");
    }
+
    return list;
 }
 //qjson转成url参数
@@ -47,21 +48,22 @@ qjson ，qArray互转
 */
 QByteArray PublicHelper::parseQJsonObjectToQByteArray(QJsonObject *repData)
 {
-    QJsonDocument document=QJsonDocument(*repData);
+   QJsonDocument  document=QJsonDocument(*repData);
     QByteArray array = document.toJson();// 转换成QByteArray
     return array;
 }
 
 QJsonObject PublicHelper::parseQByteArrayToQJsonObject(QByteArray arr)
 {
-    QString str;
-    str.prepend(arr);
-    QJsonDocument jsonDocument = QJsonDocument::fromJson(str.toUtf8().data());
+    QString *str=new QString();
+    str->prepend(arr);
+    QJsonDocument jsonDocument = QJsonDocument::fromJson(str->toUtf8().data());
     QJsonObject json =jsonDocument.object();
+
     return json;
 }
 
 PublicHelper::~PublicHelper()
 {
-
+    delete this;
 }

@@ -20,12 +20,12 @@ class HttpUtil:public QObject
     Q_OBJECT
 public:
      explicit HttpUtil(QObject *parent=nullptr);
-     QString parseQJsonObject(QJsonObject *json);
      void  get( QUrl(url), std::function<void(QJsonObject json)> call);
      void  get(QUrl(url), QJsonObject *p, std::function<void(QJsonObject json)> call);
      void  post(QUrl(url),QJsonObject  *p, std::function<void(QJsonObject json)> call);
-      void put(QUrl(url), QJsonObject *p, std::function<void(QJsonObject json)> call);
+     void put(QUrl(url), QJsonObject *p, std::function<void(QJsonObject json)> call);
      std::function<void(QJsonObject json)> callBack;
+
      ~HttpUtil();
 signals:
      void finished(QNetworkReply *reply);
@@ -34,9 +34,9 @@ public slots:
     void replyFinished(QNetworkReply *reply);
     void replyError(QNetworkReply::NetworkError *err);
 private:
-    QNetworkAccessManager *m_network;
+
     QElapsedTimer *timer;
     QMainWindow *caller;
-
+    QNetworkAccessManager *m_network;
 };
 #endif // HTTPUTIL_H

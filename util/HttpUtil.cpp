@@ -16,7 +16,7 @@ HttpUtil::HttpUtil(QObject *parent):QObject(parent)
 }
  void HttpUtil::get(QUrl(url),std::function<void(QJsonObject json)> call)
 {
-     callBack= std::move(call);
+     HttpUtil::callBack= std::move(call);
      QString _url=QT_HOST+url.toString();
       QNetworkRequest request = QNetworkRequest(_url);
       request.setHeader(QNetworkRequest::UserAgentHeader, QVariant("Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.76 Mobile Safari/537.36"));
@@ -27,8 +27,8 @@ HttpUtil::HttpUtil(QObject *parent):QObject(parent)
 
  void HttpUtil::get(QUrl(url),QJsonObject *p,std::function<void(QJsonObject json)> call)
 {
-     callBack= std::move(call);
-     PublicHelper *helper=new PublicHelper(this);
+     HttpUtil::callBack= std::move(call);
+     PublicHelper *helper=new PublicHelper();
       QString _url=QT_HOST+url.toString()+helper->parseQJsonObjectToQString(p);
       QNetworkRequest request = QNetworkRequest(QUrl(_url));
       request.setHeader(QNetworkRequest::UserAgentHeader, QVariant("Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.76 Mobile Safari/537.36"));
@@ -37,11 +37,11 @@ HttpUtil::HttpUtil(QObject *parent):QObject(parent)
 
 }
 
- void HttpUtil::put(QUrl(url),QJsonObject *p, std::function<void(QJsonObject json)> call)
+  void HttpUtil::put(QUrl(url),QJsonObject *p, std::function<void(QJsonObject json)> call)
 {
       callBack= std::move(call);
       QString _url=QT_HOST+url.toString();
-      PublicHelper *helper=new PublicHelper(this);
+      PublicHelper *helper=new PublicHelper();
       const QByteArray sb=helper->parseQJsonObjectToQByteArray(p);
       QNetworkRequest request;
       request.setUrl(QUrl(_url));
@@ -69,6 +69,7 @@ void HttpUtil::replyFinished(QNetworkReply *reply)
         jsonObject=helper->parseQByteArrayToQJsonObject(databuff);
     }
     callBack(jsonObject);
+    delete timer;
 }
 
 void HttpUtil::replyError(QNetworkReply::NetworkError *err)
@@ -76,6 +77,8 @@ void HttpUtil::replyError(QNetworkReply::NetworkError *err)
       qDebug() << err;
 }
 HttpUtil::~HttpUtil(){
-  deleteLater();
+    delete caller;
+    delete m_network;
+  this->deleteLater();
 }
 
