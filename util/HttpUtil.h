@@ -2,35 +2,41 @@
 #ifndef HTTPUTIL_H
 #define HTTPUTIL_H
 #define QT_HOST "https://apitest.aibill.cn/api"
-#define NET_TIME_OUT 60
+#define NET_TIME_OUT 6000
 #include <QtNetwork/qnetworkaccessmanager.h>
 #include <QtNetwork/qnetworkreply.h>
 #include <QtNetwork/qnetworkrequest.h>
 #include <QUrl>
 #include <util/CodeConstants.h>
 #include <QElapsedTimer>
+#include <QObject>
+#include <QThread>
+#include <functional>
+#include <QMainWindow>
 
- class HttpUtil:public QObject
+
+class HttpUtil:public QObject
 {
-     Q_OBJECT
+    Q_OBJECT
 public:
-      HttpUtil(QObject *parent = nullptr);
+     explicit HttpUtil(QObject *parent=nullptr);
      QString parseQJsonObject(QJsonObject *json);
-     QString  get( QUrl(url));
-     QString  get(QUrl(url), QJsonObject *p);
-     QString  post(QUrl(url),QJsonObject  *p);
-     QJsonObject  put(QUrl(url), QJsonObject *p);
+     void  get( QUrl(url), std::function<void(QJsonObject json)> call);
+     void  get(QUrl(url), QJsonObject *p, std::function<void(QJsonObject json)> call);
+     void  post(QUrl(url),QJsonObject  *p, std::function<void(QJsonObject json)> call);
+      void put(QUrl(url), QJsonObject *p, std::function<void(QJsonObject json)> call);
+     std::function<void(QJsonObject json)> callBack;
      ~HttpUtil();
 signals:
      void finished(QNetworkReply *reply);
-     void error(QNetworkReply::NetworkError err);
+     void error(QNetworkReply::NetworkError);
 public slots:
     void replyFinished(QNetworkReply *reply);
-    void replyError(QNetworkReply::NetworkError);
+    void replyError(QNetworkReply::NetworkError *err);
 private:
     QNetworkAccessManager *m_network;
     QElapsedTimer *timer;
-
+    QMainWindow *caller;
 
 };
 #endif // HTTPUTIL_H

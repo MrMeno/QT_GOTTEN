@@ -12,6 +12,7 @@ public:
      QStringList getDirName(QString path);
      QString parseQJsonObjectToQString(QJsonObject *repData);
      QByteArray parseQJsonObjectToQByteArray(QJsonObject *repData);
+     QJsonObject parseQByteArrayToQJsonObject(QByteArray arr);
     ~PublicHelper();
 };
 

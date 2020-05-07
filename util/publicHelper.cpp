@@ -26,6 +26,7 @@ QStringList PublicHelper::getDirName(QString path)
    }
    return list;
 }
+//qjson转成url参数
 QString PublicHelper::parseQJsonObjectToQString(QJsonObject *repData)
 {
     //遍历json对象
@@ -41,7 +42,9 @@ QString PublicHelper::parseQJsonObjectToQString(QJsonObject *repData)
     str.replace("\n","");
     return str;
 }
-
+/*
+qjson ，qArray互转
+*/
 QByteArray PublicHelper::parseQJsonObjectToQByteArray(QJsonObject *repData)
 {
     QJsonDocument document=QJsonDocument(*repData);
@@ -49,7 +52,16 @@ QByteArray PublicHelper::parseQJsonObjectToQByteArray(QJsonObject *repData)
     return array;
 }
 
+QJsonObject PublicHelper::parseQByteArrayToQJsonObject(QByteArray arr)
+{
+    QString str;
+    str.prepend(arr);
+    QJsonDocument jsonDocument = QJsonDocument::fromJson(str.toUtf8().data());
+    QJsonObject json =jsonDocument.object();
+    return json;
+}
+
 PublicHelper::~PublicHelper()
 {
-    delete this;
+
 }

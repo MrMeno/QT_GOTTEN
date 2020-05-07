@@ -4,8 +4,7 @@
 #include <QMainWindow>
 #include <QMouseEvent>
 #include "components/close_label_btn.h"
-#include "../util/HttpUtil.h"
-
+#include <functional>
 class Mylabel;
 class QLabel;
 namespace Ui {//所有窗体对象都放在ui命名空间内
@@ -24,15 +23,13 @@ public:
     //它的作用是表明该构造函数是显示的, 而非隐式的, 跟它相对应的另一个关键字是implicit,
     //意思是隐藏的,类构造函数默认情况下即声明为implicit(隐式).
     bool eventFilter(QObject *obj, QEvent *event);
-     HttpUtil *https=new HttpUtil(this);
+     //HttpUtil *https=new HttpUtil(this);
     ~LoginWindow();//析构函数,释放函数时执行
-
 private:
       Ui::LoginWindow *ui;
       bool m_move;
       QPoint m_startPoint;
       QPoint m_windowPoint;
-
     //此处变量ui等于loginwindow分配的内存地址
     //1、A.B则A为对象或者结构体；
     //2、A->B则A为指针，->是成员提取，A->B是提取A中的成员B，A只能是指向类、结构、联合的指针；
