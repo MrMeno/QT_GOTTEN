@@ -3,16 +3,17 @@
 #include <QObject>
 #include <QUrl>
 #include <QByteArray>
-
+#include <QTextCodec>
  class PublicHelper:public QObject
 {
     Q_OBJECT
 public:
      explicit PublicHelper(QObject *parent = nullptr);
-     QStringList getDirName(QString path);
-     QString parseQJsonObjectToQString(QJsonObject *repData);
-     QByteArray parseQJsonObjectToQByteArray(QJsonObject *repData);
-     QJsonObject parseQByteArrayToQJsonObject(QByteArray arr);
+    static QStringList getDirName(QString path);
+    static QString parseQJsonObjectToQString(QJsonObject *repData);
+    static QByteArray parseQJsonObjectToQByteArray(QJsonObject *repData);
+    static QJsonObject parseQByteArrayToQJsonObject(QByteArray arr);
+    static QString getJsonValue(QJsonObject json,QString name);
     ~PublicHelper();
 };
 

@@ -12,6 +12,8 @@
 #include "util/HttpUtil.h"
 #include <QRegExp>
 #include <QValidator>
+#include <util/publicHelper.h>
+#include "CorePageWindow.h"
 LoginWindow::LoginWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::LoginWindow)
@@ -35,7 +37,7 @@ LoginWindow::LoginWindow(QWidget *parent) :
       ui->userPsw->setEchoMode(QLineEdit::Password);
      ui->loginBtn->installEventFilter(this);
      ui->icon_min->installEventFilter(this);
-     QObject::connect(ui->userPsw,SIGNAL(QLineEdit::enter(QKeyEvent *event)),this,SLOT(slot_login_keydown(QKeyEvent *event)));
+     QObject::connect(ui->userPsw,SIGNAL(returnPressed()),this,SLOT(slot_login_keydown()));
 }
 void LoginWindow::mousePressEvent(QMouseEvent *event){
     //当鼠标左键点击时.
@@ -77,7 +79,13 @@ void LoginWindow::httpLogin(){
     HttpUtil *http=new HttpUtil();
     http->put(QUrl("/login"), LoginDTO,[=](QJsonObject res){
         qDebug() << "login-code:" << "success";
-        qDebug() << res;
+         QString code=PublicHelper::getJsonValue(res,"code");
+         if(code==CODE_SUCCESS){
+             CorePageWindow cp;
+             cp.show();
+             LoginWindow::close();
+             delete ui;
+         }
     });
 }
 bool LoginWindow::eventFilter(QObject *obj, QEvent *event)
@@ -124,12 +132,8 @@ bool LoginWindow::eventFilter(QObject *obj, QEvent *event)
      }
      return false;
 }
-void LoginWindow::enter(QKeyEvent *event){
-   if(event->key()==Qt::Key_Enter){
-       emit slot_login_keydown(event);
-   }
-}
- void LoginWindow::slot_login_keydown(QKeyEvent *event){
+
+ void LoginWindow::slot_login_keydown(){
     httpLogin();
 }
 

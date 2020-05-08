@@ -55,12 +55,25 @@ QByteArray PublicHelper::parseQJsonObjectToQByteArray(QJsonObject *repData)
 
 QJsonObject PublicHelper::parseQByteArrayToQJsonObject(QByteArray arr)
 {
-    QString *str=new QString();
-    str->prepend(arr);
-    QJsonDocument jsonDocument = QJsonDocument::fromJson(str->toUtf8().data());
-    QJsonObject json =jsonDocument.object();
-
+    QTextCodec *tc = QTextCodec::codecForName("UTF-8");
+    QString tmpQStr = tc->toUnicode(arr);
+    QJsonDocument jsonDoc=QJsonDocument::fromJson(tmpQStr.toUtf8().data());
+    QJsonObject json=jsonDoc.object();
     return json;
+}
+
+QString PublicHelper::getJsonValue(QJsonObject json,QString name)
+{
+    QString res="";
+    if(json.contains(name))
+    {
+      QJsonValue name_value = json.take(name);
+        if(name_value.isString())
+        {
+           res = name_value.toString();
+        }
+     }
+    return res;
 }
 
 PublicHelper::~PublicHelper()

@@ -28,8 +28,7 @@ HttpUtil::HttpUtil(QObject *parent):QObject(parent)
  void HttpUtil::get(QUrl(url),QJsonObject *p,std::function<void(QJsonObject json)> call)
 {
      HttpUtil::callBack= std::move(call);
-     PublicHelper *helper=new PublicHelper();
-      QString _url=QT_HOST+url.toString()+helper->parseQJsonObjectToQString(p);
+      QString _url=QT_HOST+url.toString()+PublicHelper::parseQJsonObjectToQString(p);
       QNetworkRequest request = QNetworkRequest(QUrl(_url));
       request.setHeader(QNetworkRequest::UserAgentHeader, QVariant("Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.76 Mobile Safari/537.36"));
       timer->start();
@@ -41,8 +40,7 @@ HttpUtil::HttpUtil(QObject *parent):QObject(parent)
 {
       callBack= std::move(call);
       QString _url=QT_HOST+url.toString();
-      PublicHelper *helper=new PublicHelper();
-      const QByteArray sb=helper->parseQJsonObjectToQByteArray(p);
+      const QByteArray sb=PublicHelper::parseQJsonObjectToQByteArray(p);
       QNetworkRequest request;
       request.setUrl(QUrl(_url));
       request.setRawHeader("Content-Type","application/json");
@@ -56,7 +54,6 @@ HttpUtil::HttpUtil(QObject *parent):QObject(parent)
 void HttpUtil::replyFinished(QNetworkReply *reply)
 {
     timer->elapsed();
-    PublicHelper *helper=new PublicHelper();
     QJsonObject jsonObject;
     if(timer->hasExpired(qlonglong(NET_TIME_OUT))){
          QJsonObject res;
@@ -66,7 +63,7 @@ void HttpUtil::replyFinished(QNetworkReply *reply)
     }
    else{
         QByteArray databuff = reply->readAll();
-        jsonObject=helper->parseQByteArrayToQJsonObject(databuff);
+        jsonObject=PublicHelper::parseQByteArrayToQJsonObject(databuff);
     }
     callBack(jsonObject);
     delete timer;

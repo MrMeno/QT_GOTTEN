@@ -37,14 +37,13 @@ private:
     //3、::是作用域运算符，A::B表示作用域A中的名称B，A可以是名字空间、类、结构；
     //4、:一般用来表示继承；
 signals:
-       void enter(QKeyEvent *event);
+
 public slots:
-        void slot_login_keydown(QKeyEvent *event);
+        void slot_login_keydown();
 protected:
         void mousePressEvent(QMouseEvent *event);
         void mouseMoveEvent(QMouseEvent *event);
         void mouseReleaseEvent(QMouseEvent *event);
-
 };
 
 
