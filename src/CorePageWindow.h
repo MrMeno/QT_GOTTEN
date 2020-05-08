@@ -17,6 +17,8 @@ public:
 
 private:
     Ui::CorePageWindow *ui;
+protected:
+    void resizeEvent(QResizeEvent *event) override;
 };
 
 #endif // COREPAGEWINDOW_H

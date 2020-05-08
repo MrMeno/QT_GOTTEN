@@ -1,5 +1,5 @@
 
-#include "./src/LoginWindow.h"
+#include "./src/CorePageWindow.h"
 #include <QApplication>
 #include <qfile.h>
 #include <qdir.h>
@@ -22,7 +22,7 @@ int main(int argc, char *argv[])
            }
       }
     a.setStyleSheet(styleSheet);
-    LoginWindow w;
+    CorePageWindow w;
      w.show();
     return a.exec();
 }

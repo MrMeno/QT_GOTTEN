@@ -13,7 +13,6 @@
 #include <QRegExp>
 #include <QValidator>
 #include <util/publicHelper.h>
-#include "CorePageWindow.h"
 LoginWindow::LoginWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::LoginWindow)
@@ -81,10 +80,9 @@ void LoginWindow::httpLogin(){
         qDebug() << "login-code:" << "success";
          QString code=PublicHelper::getJsonValue(res,"code");
          if(code==CODE_SUCCESS){
-             CorePageWindow cp;
-             cp.show();
-             LoginWindow::close();
-             delete ui;
+             cp=new CorePageWindow(this);
+             cp->show();
+             this->hide();
          }
     });
 }

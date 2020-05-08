@@ -1,0 +1,17 @@
+#content_core_frame{
+background-color: rgba(255,255,255,1);
+border-top-left-radius:10px;
+border-top-right-radius:10px;
+border-bottom-left-radius:10px;
+border-bottom-right-radius:10px;
+}
+#list_top{
+background-color:rgba(30,196,255,1);
+border-top-left-radius:10px;
+border-top-right-radius:10px;
+}
+#list_content{
+background-color:rgba(255,255,255,1);
+border-bottom-left-radius:10px;
+border-bottom-right-radius:10px;
+}

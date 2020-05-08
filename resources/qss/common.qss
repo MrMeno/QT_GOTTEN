@@ -1,6 +1,9 @@
 #LoginWindow{
 background-color:transparent;
 }
+#CorePageWindow{
+background-color:transparent;
+}
 #centralwidget{
 background-color:transparent;
 }

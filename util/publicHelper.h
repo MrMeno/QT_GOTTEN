@@ -8,7 +8,7 @@
 {
     Q_OBJECT
 public:
-     explicit PublicHelper(QObject *parent = nullptr);
+    explicit PublicHelper(QObject *parent = nullptr);
     static QStringList getDirName(QString path);
     static QString parseQJsonObjectToQString(QJsonObject *repData);
     static QByteArray parseQJsonObjectToQByteArray(QJsonObject *repData);

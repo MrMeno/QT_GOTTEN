@@ -5,5 +5,6 @@
         <file>img/logo.png</file>
         <file>qss/common.qss</file>
         <file>qss/login.qss</file>
+        <file>qss/list.qss</file>
     </qresource>
 </RCC>
