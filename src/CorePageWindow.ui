@@ -13,7 +13,7 @@
   <property name="minimumSize">
    <size>
     <width>320</width>
-    <height>500</height>
+    <height>600</height>
    </size>
   </property>
   <property name="maximumSize">
@@ -29,7 +29,7 @@
    <property name="minimumSize">
     <size>
      <width>320</width>
-     <height>500</height>
+     <height>600</height>
     </size>
    </property>
    <property name="maximumSize">
@@ -44,19 +44,19 @@
       <x>10</x>
       <y>10</y>
       <width>300</width>
-      <height>750</height>
+      <height>780</height>
      </rect>
     </property>
     <property name="minimumSize">
      <size>
       <width>300</width>
-      <height>500</height>
+      <height>580</height>
      </size>
     </property>
     <property name="maximumSize">
      <size>
       <width>300</width>
-      <height>770</height>
+      <height>780</height>
      </size>
     </property>
     <property name="frameShape">
@@ -65,7 +65,7 @@
     <property name="frameShadow">
      <enum>QFrame::Raised</enum>
     </property>
-    <widget class="QWidget" name="list_top" native="true">
+    <widget class="drag_win_widget" name="list_top" native="true">
      <property name="geometry">
       <rect>
        <x>0</x>
@@ -74,6 +74,21 @@
        <height>200</height>
       </rect>
      </property>
+     <property name="minimumSize">
+      <size>
+       <width>300</width>
+       <height>200</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>300</width>
+       <height>200</height>
+      </size>
+     </property>
+     <property name="styleSheet">
+      <string notr="true"/>
+     </property>
     </widget>
     <widget class="QWidget" name="list_content" native="true">
      <property name="geometry">
@@ -81,14 +96,47 @@
        <x>0</x>
        <y>200</y>
        <width>300</width>
-       <height>600</height>
+       <height>560</height>
       </rect>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>300</width>
+       <height>360</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>300</width>
+       <height>560</height>
+      </size>
      </property>
     </widget>
    </widget>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QStatusBar" name="statusbar">
+   <property name="minimumSize">
+    <size>
+     <width>320</width>
+     <height>0</height>
+    </size>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>320</width>
+     <height>16777215</height>
+    </size>
+   </property>
+  </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>drag_win_widget</class>
+   <extends>QWidget</extends>
+   <header location="global">components/drag_win_widget.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

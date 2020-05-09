@@ -3,7 +3,6 @@
 #include <QApplication>
 #include <qfile.h>
 #include <qgraphicseffect.h>
-#include <windows.h>
 #include <QMessageBox>
 #include <QObject>
 #include <QJsonObject>

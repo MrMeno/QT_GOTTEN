@@ -27,15 +27,17 @@ SOURCES += \
            src\LoginWindow.cpp \
     util\CodeConstants.cpp \
             util\PublicHelper.cpp \
-          util\HttpUtil.cpp
+          util\HttpUtil.cpp \
+    components\drag_win_widget.cpp
 
 HEADERS += \
     components\close_label_btn.h \
            src\LoginWindow.h \
            src\CorePageWindow.h \
-    util/CodeConstants.h \
+    util\CodeConstants.h \
          util\PublicHelper.h \
-          util\HttpUtil.h
+          util\HttpUtil.h \
+    components\drag_win_widget.h
 
 FORMS += \
     src\CorePageWindow.ui \

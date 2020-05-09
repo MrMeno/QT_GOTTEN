@@ -1,12 +1,12 @@
 #ifndef COREPAGEWINDOW_H
 #define COREPAGEWINDOW_H
-
 #include <QMainWindow>
-
+#include <QMouseEvent>
+#include <QObject>
+#include "components/drag_win_widget.h"
 namespace Ui {
 class CorePageWindow;
 }
-
 class CorePageWindow : public QMainWindow
 {
     Q_OBJECT
@@ -17,6 +17,7 @@ public:
 
 private:
     Ui::CorePageWindow *ui;
+
 protected:
     void resizeEvent(QResizeEvent *event) override;
 };
