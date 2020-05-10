@@ -21,10 +21,10 @@ CorePageWindow::CorePageWindow(QWidget *parent) :
     shadowEffect->setBlurRadius(10);	//设置圆角半径 像素
     shadowEffect->setColor(Qt::black);	// 设置边框颜色
     shadowEffect->setOffset(0);
-    WId ids=this->winId();
-    ui->list_top=new drag_win_widget(this,ids);
+    ui->list_top=new drag_win_widget(parent);
     ui->setupUi(this);
     ui->content_core_frame->setGraphicsEffect(shadowEffect);
+    //qDebug()<< __username;
 }
 
 void CorePageWindow::resizeEvent(QResizeEvent *event){

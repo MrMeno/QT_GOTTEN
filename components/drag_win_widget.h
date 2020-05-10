@@ -4,21 +4,23 @@
 #include <QWidget>
 #include <QObject>
 #include <QMouseEvent>
+#include <QStyleOption>
+#include <QPainter>
 class drag_win_widget:public QWidget
 {
     Q_OBJECT
 public:
-    drag_win_widget(QWidget *parent=nullptr,WId WinId=0);
+    drag_win_widget(QWidget *parent=nullptr);
 private:
     bool m_move;
     QPoint m_startPoint;
     QPoint m_windowPoint;
-   unsigned int father;
-   QWidget *f;
+    QWidget *father;
 protected:
     void mousePressEvent(QMouseEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
+    void paintEvent(QPaintEvent *event);
 };
 
 #endif // DRAG_WIN_WIDGET_H

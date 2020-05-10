@@ -9,45 +9,51 @@
 #include "util/publicHelper.h"
 #include <QApplication>
 
+QString __url="";
+QString __username="";
 HttpUtil::HttpUtil(QObject *parent):QObject(parent)
 {
-      m_network = new QNetworkAccessManager(this);
-      QObject::connect(m_network, SIGNAL(finished(QNetworkReply*)),this ,SLOT(replyFinished(QNetworkReply*)));
-}
- void HttpUtil::get(QUrl(url),std::function<void(QJsonObject json)> call)
-{
-     HttpUtil::callBack= std::move(call);
-     QString _url=QT_HOST+url.toString();
-      QNetworkRequest request = QNetworkRequest(_url);
-      request.setHeader(QNetworkRequest::UserAgentHeader, QVariant("Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.76 Mobile Safari/537.36"));
-      timer->start();
-      m_network->get(QNetworkRequest(request));
+    m_network = new QNetworkAccessManager(this);
+    QObject::connect(m_network, SIGNAL(finished(QNetworkReply*)),this ,SLOT(replyFinished(QNetworkReply*)));
 
 }
-
- void HttpUtil::get(QUrl(url),QJsonObject *p,std::function<void(QJsonObject json)> call)
+void HttpUtil::get(QUrl(url),std::function<void(QJsonObject json)> call)
 {
-     HttpUtil::callBack= std::move(call);
-      QString _url=QT_HOST+url.toString()+PublicHelper::parseQJsonObjectToQString(p);
-      QNetworkRequest request = QNetworkRequest(QUrl(_url));
-      request.setHeader(QNetworkRequest::UserAgentHeader, QVariant("Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.76 Mobile Safari/537.36"));
-      timer->start();
-      m_network->get(QNetworkRequest(request));
+    HttpUtil::callBack= std::move(call);
+    QString _url=QT_HOST+url.toString();
+    QNetworkRequest request = QNetworkRequest(_url);
+    request.setHeader(QNetworkRequest::UserAgentHeader, QVariant("Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.76 Mobile Safari/537.36"));
+    timer->start();
+    m_network->get(QNetworkRequest(request));
 
 }
 
-  void HttpUtil::put(QUrl(url),QJsonObject *p, std::function<void(QJsonObject json)> call)
+void HttpUtil::get(QUrl(url),QJsonObject *p,std::function<void(QJsonObject json)> call)
 {
-      callBack= std::move(call);
-      QString _url=QT_HOST+url.toString();
-      const QByteArray sb=PublicHelper::parseQJsonObjectToQByteArray(p);
-      QNetworkRequest request;
-      request.setUrl(QUrl(_url));
-      request.setRawHeader("Content-Type","application/json");
-      request.setHeader(QNetworkRequest::UserAgentHeader, QVariant("Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.76 Mobile Safari/537.36"));
-      timer=new QElapsedTimer();
-      timer->start();
-      m_network->put(QNetworkRequest(request),sb);
+    HttpUtil::callBack= std::move(call);
+    QString _url=QT_HOST+url.toString()+PublicHelper::parseQJsonObjectToQString(p);
+    QNetworkRequest request = QNetworkRequest(QUrl(_url));
+    request.setHeader(QNetworkRequest::UserAgentHeader, QVariant("Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.76 Mobile Safari/537.36"));
+    timer->start();
+    m_network->get(QNetworkRequest(request));
+
+}
+
+void HttpUtil::put(QUrl(url),QJsonObject *p, std::function<void(QJsonObject json)> call)
+{
+    __url=url.toString();
+    callBack= std::move(call);
+    QString _url=QT_HOST+url.toString();
+    const QByteArray sb=PublicHelper::parseQJsonObjectToQByteArray(p);
+    QString username=PublicHelper::getJsonValue(*p,"userName");
+    __username=username;
+    QNetworkRequest request;
+    request.setUrl(QUrl(_url));
+    request.setRawHeader("Content-Type","application/json");
+    request.setHeader(QNetworkRequest::UserAgentHeader, QVariant("Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.76 Mobile Safari/537.36"));
+    timer=new QElapsedTimer();
+    timer->start();
+    m_network->put(QNetworkRequest(request),sb);
 
 }
 
@@ -55,15 +61,33 @@ void HttpUtil::replyFinished(QNetworkReply *reply)
 {
     timer->elapsed();
     QJsonObject jsonObject;
+    cookieJar= this->m_network->cookieJar();
+    QList<QNetworkCookie> list= cookieJar->cookiesForUrl(QUrl(QT_HOST));
+    for(int i=0;i<list.length();i++)
+    {
+        qDebug()<<list[i].name()<<":"<<list[i].value();
+    };
     if(timer->hasExpired(qlonglong(NET_TIME_OUT))){
-         QJsonObject res;
-         res.insert("code",CODE_SYS_ERROR);
-         res.insert("msg",CODE_SYS_ERROR_MSG);
-         jsonObject= res;
+        QJsonObject res;
+        res.insert("code",CODE_SYS_ERROR);
+        res.insert("msg",CODE_SYS_ERROR_MSG);
+        jsonObject= res;
     }
-   else{
+    else{
         QByteArray databuff = reply->readAll();
         jsonObject=PublicHelper::parseQByteArrayToQJsonObject(databuff);
+        QString current_date_time =QDateTime::currentDateTime().toString();
+        if(__url=="/login"){
+            QSqlQuery sql;
+            if(sql.exec("select * from user where username=\'"+__username+"\'")){
+                sql.exec("update user set token = \'"+list[0].value()+"\',login_time=\'"+current_date_time+"\''isCurrent"+1+"' where username = \'"+__username+"\'");
+            }
+            else{
+                sql.exec("'INSERT INTO user VALUES(\'"+__username+"\',\'"+list[0].value()+"\', \'"+current_date_time+"\')'");
+            }
+
+
+        }
     }
     callBack(jsonObject);
     delete timer;
@@ -71,11 +95,11 @@ void HttpUtil::replyFinished(QNetworkReply *reply)
 
 void HttpUtil::replyError(QNetworkReply::NetworkError *err)
 {
-      qDebug() << err;
+    qDebug() << err;
 }
 HttpUtil::~HttpUtil(){
     delete caller;
     delete m_network;
-  this->deleteLater();
+    this->deleteLater();
 }
 

@@ -1,5 +1,5 @@
 #设置项目依赖核心类库，既QT对应安装目录下/include的两个类库文件夹
-QT       += core gui network
+QT       += core gui network sql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 #开发语言的版本
@@ -28,7 +28,8 @@ SOURCES += \
     util\CodeConstants.cpp \
             util\PublicHelper.cpp \
           util\HttpUtil.cpp \
-    components\drag_win_widget.cpp
+    components\drag_win_widget.cpp \
+    util/httpService.cpp
 
 HEADERS += \
     components\close_label_btn.h \
@@ -37,7 +38,8 @@ HEADERS += \
     util\CodeConstants.h \
          util\PublicHelper.h \
           util\HttpUtil.h \
-    components\drag_win_widget.h
+    components\drag_win_widget.h \
+    util/httpService.h
 
 FORMS += \
     src\CorePageWindow.ui \

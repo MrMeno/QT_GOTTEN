@@ -61,7 +61,7 @@
     <property name="midLineWidth">
      <number>0</number>
     </property>
-    <widget class="QWidget" name="title" native="true">
+    <widget class="drag_win_widget" name="title" native="true">
      <property name="geometry">
       <rect>
        <x>0</x>
@@ -188,6 +188,12 @@
    <class>Mylabel</class>
    <extends>QLabel</extends>
    <header location="global">components/close_label_btn.h</header>
+  </customwidget>
+  <customwidget>
+   <class>drag_win_widget</class>
+   <extends>QWidget</extends>
+   <header location="global">components/drag_win_widget.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

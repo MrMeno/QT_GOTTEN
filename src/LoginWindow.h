@@ -8,6 +8,9 @@
 #include <functional>
 #include <QLineEdit>
 #include "CorePageWindow.h"
+#include "components/drag_win_widget.h"
+#include "util/httpService.h"
+
 namespace Ui {//所有窗体对象都放在ui命名空间内
 class LoginWindow;//声明登录窗体类
 }
@@ -29,9 +32,6 @@ public:
     ~LoginWindow();//析构函数,释放函数时执行
 private:
       Ui::LoginWindow *ui;
-      bool m_move;
-      QPoint m_startPoint;
-      QPoint m_windowPoint;
       CorePageWindow *cp;
     //此处变量ui等于loginwindow分配的内存地址
     //1、A.B则A为对象或者结构体；
@@ -42,10 +42,6 @@ signals:
 
 public slots:
         void slot_login_keydown();
-protected:
-        void mousePressEvent(QMouseEvent *event);
-        void mouseMoveEvent(QMouseEvent *event);
-        void mouseReleaseEvent(QMouseEvent *event);
 };
 
 

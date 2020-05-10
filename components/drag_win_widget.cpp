@@ -1,10 +1,8 @@
 #include "drag_win_widget.h"
-
-drag_win_widget::drag_win_widget(QWidget *parent,WId winId):QWidget(parent)
+#include <QDebug>
+drag_win_widget::drag_win_widget(QWidget *parent):QWidget(parent)
 {
-     father= winId;
-     f= QMainWindow::find(winId);
-
+     father= parent;
 
 
 }
@@ -17,7 +15,7 @@ void drag_win_widget::mousePressEvent(QMouseEvent *event){
            m_startPoint = event->globalPos();
            //记录窗体的世界坐标.
 
-           m_windowPoint = this->f->frameGeometry().topLeft();
+           m_windowPoint = this->father->parentWidget()->parentWidget()->frameGeometry().topLeft();
        }
 }
 
@@ -28,7 +26,8 @@ void drag_win_widget::mouseMoveEvent(QMouseEvent *event)
         //移动中的鼠标位置相对于初始位置的相对位置.
         QPoint relativePos = event->globalPos() - m_startPoint;
         //然后移动窗体即可.
-        this->f->move(m_windowPoint + relativePos );
+        this->father->parentWidget()->parentWidget()->move(m_windowPoint + relativePos );
+
     }
 }
 void drag_win_widget::mouseReleaseEvent(QMouseEvent *event)
@@ -38,4 +37,12 @@ void drag_win_widget::mouseReleaseEvent(QMouseEvent *event)
         //改变移动状态.
         m_move = false;
     }
+}
+
+void drag_win_widget::paintEvent(QPaintEvent* e)
+{
+    QStyleOption option;
+    option.init(this);
+    QPainter p(this);
+    style()->drawPrimitive(QStyle::PE_Widget, &option, &p, this);
 }

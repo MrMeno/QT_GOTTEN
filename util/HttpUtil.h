@@ -13,7 +13,11 @@
 #include <QThread>
 #include <functional>
 #include <QMainWindow>
-
+#include <QNetworkCookie>
+#include <QNetworkCookieJar>
+#include <QSqlDatabase>
+#include <QSqlError>
+#include <QSqlQuery>
 
 class HttpUtil:public QObject
 {
@@ -23,7 +27,7 @@ public:
      void  get( QUrl(url), std::function<void(QJsonObject json)> call);
      void  get(QUrl(url), QJsonObject *p, std::function<void(QJsonObject json)> call);
      void  post(QUrl(url),QJsonObject  *p, std::function<void(QJsonObject json)> call);
-     void put(QUrl(url), QJsonObject *p, std::function<void(QJsonObject json)> call);
+     void  put(QUrl(url), QJsonObject *p, std::function<void(QJsonObject json)> call);
      std::function<void(QJsonObject json)> callBack;
 
      ~HttpUtil();
@@ -34,7 +38,7 @@ public slots:
     void replyFinished(QNetworkReply *reply);
     void replyError(QNetworkReply::NetworkError *err);
 private:
-
+    QNetworkCookieJar *cookieJar;
     QElapsedTimer *timer;
     QMainWindow *caller;
     QNetworkAccessManager *m_network;

@@ -18,8 +18,32 @@
 class CodeHelper:public QObject
 {
     Q_OBJECT
+
 public:
     explicit CodeHelper(QObject *parent = nullptr);
+    static QString API_HEARTBEAT;
+    static QString API_LOGIN;
+    static QString API_CHANGE_PSW;
+    static QString API_GET_BANK_DOMAIN;
+    static QString API_GET_RECEIOT_BANK_DOMAIN;
+    static QString API_LOGOUT;
+    static QString API_GET_ORG;
+    static QString API_BILL_UPLOAD;
+    static QString API_RECEIPT_UPLOAD;
+    static QString API_BILL_LIST;
+    static QString API_BILL_UPDATE;
+    static QString API_BILL_DETAIL;
+    static QString API_RECEIPT_DETAIL;
+    static QString API_BILL_REFUSE;
+    static QString API_APP_INFO;
+    static QString API_LIST_PAGE;
+    static QString API_LIST_RECIPT;
+    static QString API_POST_EXCEPTION;
+    static QString API_GET_ACCOUNT;
+    static QString API_ACCOUNT_UPLOAD;
+    static QString API_PUBLISH_INIT;
+    static QString API_PUBLISH_UPLOAD;
+    static QString API_PUBLISH_ACCOUNTLIST;
     ~CodeHelper();
 };
 
