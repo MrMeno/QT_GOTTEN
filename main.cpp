@@ -1,7 +1,3 @@
-#ifdef Q_CC_MSVC
-#include <windows.h>
-    #pragma comment(lib, "user32.lib")
-#endif
 #include "./src/LoginWindow.h"
 #include <QApplication>
 #include <qfile.h>
@@ -9,9 +5,7 @@
 #include <QDebug>
 #include "util/publicHelper.h"
 #include "util/HttpUtil.h"
-#include <QSqlDatabase>
-#include <QSqlError>
-#include <QSqlQuery>
+#include "util/DataBase.h"
 #include <QObject>
 #include <QAbstractNativeEventFilter>
 
@@ -21,28 +15,12 @@ int main(int argc, char *argv[])
     QApplication::setQuitOnLastWindowClosed(true);
     a.connect(&a,SIGNAL(lastWindowClosed()),&a,SLOT(quit()));
     /*创建本地数据库 */
-    QSqlDatabase database;
-    database = QSqlDatabase::addDatabase("QSQLITE");
-    database.setDatabaseName("ticket_abill.db");
+     DataBase db;
     //链接数据库
-    if (!database.open())
-    {
-        qDebug() << "Error: Failed to connect database." << database.lastError();
-    }
-    else
-    {
-        qDebug() << "Succeed to connect database." ;
-    }
+     db.createConnection();
     //创建user表
-    QSqlQuery sql_query;
-    if(!sql_query.exec("create table user(username text primary key, token text,isCurrent int default 0,login_time text)"))
-    {
-        qDebug() << "Error: Fail to create table."<< sql_query.lastError();
-    }
-    else
-    {
-        qDebug() << "user created!";
-    }
+     db.createTable();
+     db.queryAll();
     /*加载样式表*/
     PublicHelper *helper=new PublicHelper();
     QStringList strList=helper->getDirName(":/qss");

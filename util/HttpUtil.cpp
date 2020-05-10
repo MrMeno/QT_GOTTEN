@@ -79,15 +79,15 @@ void HttpUtil::replyFinished(QNetworkReply *reply)
         jsonObject=PublicHelper::parseQByteArrayToQJsonObject(databuff);
         QString current_date_time =QDateTime::currentDateTime().toString();
         if(__url=="/login"){
+            QSqlDatabase db = QSqlDatabase::database("aibill");
             QSqlQuery sql;
-            if(sql.exec("select * from user where username=\'"+username+"\'")){
-                sql.exec("update user set token = \'"+list[0].value()+"\',login_time=\'"+current_date_time+"\''isCurrent"+1+"' where username = \'"+username+"\'");
+            bool hasThisUser=sql.exec("select * from aibill_user where account=\'"+username+"\'");
+            if(hasThisUser){
+                qDebug()<<username;
             }
             else{
-                sql.exec("'INSERT INTO user VALUES(\'"+username+"\',\'"+list[0].value()+"\', \'"+current_date_time+"\')'");
+
             }
-
-
         }
     }
     callBack(jsonObject);

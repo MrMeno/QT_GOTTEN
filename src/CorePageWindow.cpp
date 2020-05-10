@@ -10,6 +10,7 @@
 #include "util/HttpUtil.h"
 #include <QRegExp>
 #include <QValidator>
+#include "util/DataBase.h"
 
 CorePageWindow::CorePageWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -24,7 +25,6 @@ CorePageWindow::CorePageWindow(QWidget *parent) :
     ui->list_top=new drag_win_widget(parent);
     ui->setupUi(this);
     ui->content_core_frame->setGraphicsEffect(shadowEffect);
-
 }
 
 void CorePageWindow::resizeEvent(QResizeEvent *event){

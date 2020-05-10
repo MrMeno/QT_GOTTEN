@@ -15,9 +15,7 @@
 #include <QMainWindow>
 #include <QNetworkCookie>
 #include <QNetworkCookieJar>
-#include <QSqlDatabase>
-#include <QSqlError>
-#include <QSqlQuery>
+#include "DataBase.h"
 
 class HttpUtil:public QObject
 {
