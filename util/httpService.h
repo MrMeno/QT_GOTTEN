@@ -16,6 +16,7 @@ public:
     httpService(QObject *parent=nullptr);
     HttpUtil *http;
     void login (QJsonObject *LoginDTO,std::function<void(QJsonObject json)> call);
+    void getBillList (QJsonObject *LoginDTO,std::function<void(QJsonObject json)> call);
 };
 
 #endif // HTTPSERVICE_H

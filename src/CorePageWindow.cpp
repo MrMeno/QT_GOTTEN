@@ -24,7 +24,7 @@ CorePageWindow::CorePageWindow(QWidget *parent) :
     ui->list_top=new drag_win_widget(parent);
     ui->setupUi(this);
     ui->content_core_frame->setGraphicsEffect(shadowEffect);
-    //qDebug()<< __username;
+
 }
 
 void CorePageWindow::resizeEvent(QResizeEvent *event){

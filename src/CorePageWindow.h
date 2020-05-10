@@ -4,6 +4,8 @@
 #include <QMouseEvent>
 #include <QObject>
 #include "components/drag_win_widget.h"
+#include "util/HttpUtil.h"
+#include "util/httpService.h"
 namespace Ui {
 class CorePageWindow;
 }

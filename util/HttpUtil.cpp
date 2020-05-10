@@ -10,12 +10,11 @@
 #include <QApplication>
 
 QString __url="";
-QString __username="";
+QString username="";
 HttpUtil::HttpUtil(QObject *parent):QObject(parent)
 {
     m_network = new QNetworkAccessManager(this);
     QObject::connect(m_network, SIGNAL(finished(QNetworkReply*)),this ,SLOT(replyFinished(QNetworkReply*)));
-
 }
 void HttpUtil::get(QUrl(url),std::function<void(QJsonObject json)> call)
 {
@@ -23,6 +22,7 @@ void HttpUtil::get(QUrl(url),std::function<void(QJsonObject json)> call)
     QString _url=QT_HOST+url.toString();
     QNetworkRequest request = QNetworkRequest(_url);
     request.setHeader(QNetworkRequest::UserAgentHeader, QVariant("Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.76 Mobile Safari/537.36"));
+    timer=new QElapsedTimer();
     timer->start();
     m_network->get(QNetworkRequest(request));
 
@@ -34,6 +34,7 @@ void HttpUtil::get(QUrl(url),QJsonObject *p,std::function<void(QJsonObject json)
     QString _url=QT_HOST+url.toString()+PublicHelper::parseQJsonObjectToQString(p);
     QNetworkRequest request = QNetworkRequest(QUrl(_url));
     request.setHeader(QNetworkRequest::UserAgentHeader, QVariant("Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.76 Mobile Safari/537.36"));
+    timer=new QElapsedTimer();
     timer->start();
     m_network->get(QNetworkRequest(request));
 
@@ -45,8 +46,8 @@ void HttpUtil::put(QUrl(url),QJsonObject *p, std::function<void(QJsonObject json
     callBack= std::move(call);
     QString _url=QT_HOST+url.toString();
     const QByteArray sb=PublicHelper::parseQJsonObjectToQByteArray(p);
-    QString username=PublicHelper::getJsonValue(*p,"userName");
-    __username=username;
+    QString userName=PublicHelper::getJsonValue(*p,"userName");
+    username=userName;
     QNetworkRequest request;
     request.setUrl(QUrl(_url));
     request.setRawHeader("Content-Type","application/json");
@@ -79,11 +80,11 @@ void HttpUtil::replyFinished(QNetworkReply *reply)
         QString current_date_time =QDateTime::currentDateTime().toString();
         if(__url=="/login"){
             QSqlQuery sql;
-            if(sql.exec("select * from user where username=\'"+__username+"\'")){
-                sql.exec("update user set token = \'"+list[0].value()+"\',login_time=\'"+current_date_time+"\''isCurrent"+1+"' where username = \'"+__username+"\'");
+            if(sql.exec("select * from user where username=\'"+username+"\'")){
+                sql.exec("update user set token = \'"+list[0].value()+"\',login_time=\'"+current_date_time+"\''isCurrent"+1+"' where username = \'"+username+"\'");
             }
             else{
-                sql.exec("'INSERT INTO user VALUES(\'"+__username+"\',\'"+list[0].value()+"\', \'"+current_date_time+"\')'");
+                sql.exec("'INSERT INTO user VALUES(\'"+username+"\',\'"+list[0].value()+"\', \'"+current_date_time+"\')'");
             }
 
 

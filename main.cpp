@@ -1,4 +1,7 @@
-
+#ifdef Q_CC_MSVC
+#include <windows.h>
+    #pragma comment(lib, "user32.lib")
+#endif
 #include "./src/LoginWindow.h"
 #include <QApplication>
 #include <qfile.h>
@@ -9,12 +12,15 @@
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QSqlQuery>
+#include <QObject>
+#include <QAbstractNativeEventFilter>
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    QApplication::setQuitOnLastWindowClosed(false);
-    /*创建本地数据库*/
+    QApplication::setQuitOnLastWindowClosed(true);
+    a.connect(&a,SIGNAL(lastWindowClosed()),&a,SLOT(quit()));
+    /*创建本地数据库 */
     QSqlDatabase database;
     database = QSqlDatabase::addDatabase("QSQLITE");
     database.setDatabaseName("ticket_abill.db");
@@ -51,7 +57,7 @@ int main(int argc, char *argv[])
       }
     a.setStyleSheet(styleSheet);
     LoginWindow w;
-     w.show();
+    w.show();
     return a.exec();
 }
 
