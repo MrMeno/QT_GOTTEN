@@ -14,7 +14,7 @@
 #define CODE_USER_UN_AUTHORIZED "010003"
 
 #include <QObject>
-
+extern QString SESSION;
 class CodeHelper:public QObject
 {
     Q_OBJECT

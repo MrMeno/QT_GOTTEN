@@ -28,6 +28,7 @@
  QString CodeHelper::API_PUBLISH_INIT= "/bill/publish/init";
  QString CodeHelper::API_PUBLISH_UPLOAD= "/bill/publish/push";
  QString CodeHelper::API_PUBLISH_ACCOUNTLIST= "/bill/publish/get/account";
+ QString SESSION = "test";
  CodeHelper::~CodeHelper(){
      delete this;
  }

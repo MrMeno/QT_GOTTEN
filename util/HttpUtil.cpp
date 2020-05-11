@@ -8,29 +8,24 @@
 #include <QJsonDocument>
 #include "util/publicHelper.h"
 #include <QApplication>
-
+#include <util/CodeConstants.h>
 QString __url="";
 QString username="";
-
 HttpUtil::HttpUtil(QObject *parent):QObject(parent)
 {
     m_network = new QNetworkAccessManager(this);
     QObject::connect(m_network, SIGNAL(finished(QNetworkReply*)),this ,SLOT(replyFinished(QNetworkReply*)));
-    DataBase *db=new DataBase();
-    db->createConnection();
-
-    QSqlQueryModel *s=new QSqlQueryModel();
-
-    s->setQuery("select * from aibill_user where isCurrent=1",db->d_b);
-    int count = s->rowCount();
-    qDebug() << QString("counter: %1").arg(count);
+    qDebug()<<SESSION;
 }
 void HttpUtil::get(QUrl(url),std::function<void(QJsonObject json)> call)
 {
+
     HttpUtil::callBack= std::move(call);
     QString _url=QT_HOST+url.toString();
     QNetworkRequest request = QNetworkRequest(_url);
+
     request.setHeader(QNetworkRequest::UserAgentHeader, QVariant("Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.76 Mobile Safari/537.36"));
+    request.setRawHeader("Cookie",("TICKETSESSIONSID="+SESSION).toLatin1());
     timer=new QElapsedTimer();
     timer->start();
     m_network->get(QNetworkRequest(request));
@@ -39,10 +34,12 @@ void HttpUtil::get(QUrl(url),std::function<void(QJsonObject json)> call)
 
 void HttpUtil::get(QUrl(url),QJsonObject *p,std::function<void(QJsonObject json)> call)
 {
+    __url=url.toString();
     HttpUtil::callBack= std::move(call);
-    QString _url=QT_HOST+url.toString()+PublicHelper::parseQJsonObjectToQString(p);
+    QString _url=QT_HOST+url.toString()+"?"+PublicHelper::parseQJsonObjectToQString(p);
     QNetworkRequest request = QNetworkRequest(QUrl(_url));
     request.setHeader(QNetworkRequest::UserAgentHeader, QVariant("Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.76 Mobile Safari/537.36"));
+    request.setRawHeader("Cookies",("TICKETSESSIONSID="+SESSION).toLatin1());
     timer=new QElapsedTimer();
     timer->start();
     m_network->get(QNetworkRequest(request));
@@ -51,7 +48,7 @@ void HttpUtil::get(QUrl(url),QJsonObject *p,std::function<void(QJsonObject json)
 
 void HttpUtil::put(QUrl(url),QJsonObject *p, std::function<void(QJsonObject json)> call)
 {
-    __url=url.toString();
+
     callBack= std::move(call);
     QString _url=QT_HOST+url.toString();
     const QByteArray sb=PublicHelper::parseQJsonObjectToQByteArray(p);
@@ -60,6 +57,7 @@ void HttpUtil::put(QUrl(url),QJsonObject *p, std::function<void(QJsonObject json
     QNetworkRequest request;
     request.setUrl(QUrl(_url));
     request.setRawHeader("Content-Type","application/json");
+    request.setRawHeader("Cookies",("TICKETSESSIONSID="+SESSION).toLatin1());
     request.setHeader(QNetworkRequest::UserAgentHeader, QVariant("Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.76 Mobile Safari/537.36"));
     timer=new QElapsedTimer();
     timer->start();
@@ -75,11 +73,6 @@ void HttpUtil::replyFinished(QNetworkReply *reply)
     QJsonValue value;
     cookieJar= this->m_network->cookieJar();
     QList<QNetworkCookie> list= cookieJar->cookiesForUrl(QUrl(QT_HOST));
-    for(int i=0;i<list.length();i++)
-    {
-      //qDebug()<<list[i].name()<<":"<<list[i].value();
-    };
-
     if(timer->hasExpired(qlonglong(NET_TIME_OUT))){
         QJsonObject res;
         res.insert("code",CODE_SYS_ERROR);
@@ -89,11 +82,14 @@ void HttpUtil::replyFinished(QNetworkReply *reply)
     else{
         QByteArray databuff = reply->readAll();
         jsonObject=PublicHelper::parseQByteArrayToQJsonObject(databuff);
-
-        var.setValue(list[0].value());
-        if(var.data()!=NULL){
-            value=QJsonValue::fromVariant(var);
-            jsonObject.insert(QString(u8"TICKETSESSIONSID"),value);
+        QString code=PublicHelper::getJsonValue(jsonObject,"code");
+        if(code==CODE_SUCCESS){
+           var.setValue(list[0].value());
+           if(var.data()!=NULL){
+               value=QJsonValue::fromVariant(var);
+               jsonObject.insert(QString(u8"TICKETSESSIONSID"),value);
+               SESSION=value.toString();
+              }
         }
     }
     callBack(jsonObject);

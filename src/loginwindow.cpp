@@ -37,6 +37,8 @@ LoginWindow::LoginWindow(QWidget *parent) :
     ui->userPsw->setEchoMode(QLineEdit::Password);
     ui->loginBtn->installEventFilter(this);
     ui->icon_min->installEventFilter(this);
+    ui->userName->setText("13556886172");
+    ui->userPsw->setText("m123456");
     QObject::connect(ui->userPsw,SIGNAL(returnPressed()),this,SLOT(slot_login_keydown()));
 }
 
@@ -51,8 +53,8 @@ void LoginWindow::httpLogin(){
         QString code=PublicHelper::getJsonValue(res,"code");
         QString token=PublicHelper::getJsonValue(res,"TICKETSESSIONSID");
         if(code==CODE_SUCCESS){
+           /*记录此次登录后，java返回的token*/
             loginAccount=userName;
-            /*记录此次登录后，java返回的token*/
             QString current_date_time =QDateTime::currentDateTime().toString();
             DataBase *db=new DataBase();
             db->createConnection();

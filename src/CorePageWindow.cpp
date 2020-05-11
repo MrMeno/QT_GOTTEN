@@ -12,6 +12,7 @@
 #include <QValidator>
 #include "util/DataBase.h"
 #include <QIcon>
+#include <QCache>
 
 CorePageWindow::CorePageWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -32,7 +33,7 @@ CorePageWindow::CorePageWindow(QWidget *parent) :
     param->insert("pageNo","1");
      param->insert("pageSize","10");
      serve->getBillList(param,[=](QJsonObject res){
-
+        qDebug()<<res;
      });
 }
 

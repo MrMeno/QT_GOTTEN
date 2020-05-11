@@ -62,9 +62,10 @@ bool DataBase::insert(QString account,QString token)
     if(!success)
     {
         QSqlError lastError = query.lastError();
-        qDebug() <<  u8"insert error:"+lastError.driverText();
+        qDebug() <<  u8"------------------insert error:"+lastError.driverText();
         return false;
     }
+    qDebug() << u8"insert success-----------------------" ;
     return true;
 }
 

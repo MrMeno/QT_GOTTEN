@@ -10,7 +10,6 @@
 #include <QSqlRecord>
 #include <QTextCodec>
 #include <QSqlQueryModel>
-
 class DataBase
 {
 public:

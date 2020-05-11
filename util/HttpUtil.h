@@ -15,6 +15,7 @@
 #include <QMainWindow>
 #include <QNetworkCookie>
 #include <QNetworkCookieJar>
+#include <QCache>
 #include "DataBase.h"
 
 class HttpUtil:public QObject
@@ -28,7 +29,7 @@ public:
      void  post(QUrl(url),QJsonObject  *p, std::function<void(QJsonObject json)> call);
      void  put(QUrl(url), QJsonObject *p, std::function<void(QJsonObject json)> call);
      std::function<void(QJsonObject json)> callBack;
-
+       //virtual QNetworkAccessManager *create(QObject *parent);
      ~HttpUtil();
 signals:
      void finished(QNetworkReply *reply);
