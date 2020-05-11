@@ -7,10 +7,11 @@
 #include <QJsonObject>
 #include <iterator>
 #include <qdebug.h>
-#include "util/HttpUtil.h"
+#include "util/httpService.h"
 #include <QRegExp>
 #include <QValidator>
 #include "util/DataBase.h"
+#include <QIcon>
 
 CorePageWindow::CorePageWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -24,7 +25,15 @@ CorePageWindow::CorePageWindow(QWidget *parent) :
     shadowEffect->setOffset(0);
     ui->list_top=new drag_win_widget(parent);
     ui->setupUi(this);
+    this->setWindowIcon(QIcon(":/img/logo.png"));
     ui->content_core_frame->setGraphicsEffect(shadowEffect);
+    httpService *serve=new httpService();
+    QJsonObject *param =new QJsonObject();
+    param->insert("pageNo","1");
+     param->insert("pageSize","10");
+     serve->getBillList(param,[=](QJsonObject res){
+
+     });
 }
 
 void CorePageWindow::resizeEvent(QResizeEvent *event){

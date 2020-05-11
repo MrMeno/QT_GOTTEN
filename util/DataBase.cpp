@@ -6,15 +6,23 @@ DataBase::DataBase()
 }
 bool DataBase::createConnection()
 {
-    //以后就可以用"sqlite1"与数据库进行连接了
-    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", "aibill");
+    //以后就可以用"aibill"与数据库进行连接了
+   QSqlDatabase db;
+   if(db.contains("aibill")){
+       db=QSqlDatabase::database("aibill");
+   }
+   else{
+
+       db = QSqlDatabase::addDatabase("QSQLITE", "aibill");
+   }
     db.setDatabaseName("ticket_abill.db");
     if( !db.open())
     {
-        qDebug() << u8"error connect";
+        qDebug() << u8"DATABASE:error connect";
         return false;
     }
-    qDebug() << u8"success connect";
+    qDebug() << u8"DATABASE:success connect";
+    d_b=db;
     return true;
 }
 
@@ -23,17 +31,18 @@ bool DataBase::createTable()
 {
     QSqlDatabase db = QSqlDatabase::database("aibill"); //建立数据库连接
     QSqlQuery query(db);
-    bool success = query.exec("create table aibill_user(id integer PRIMARY KEY autoincrement,account varchar(100) PRIMARY KEY,"
-                              "create_time varchar(100),session_token varchar(100),isCurrent int default 0)");
-    //(id,用户名，登录时间，token，当前是否登录)
+    bool success = query.exec("create table aibill_user(account varchar PRIMARY KEY,"
+                              "create_time varchar,session_token varchar,isCurrent integer default 0)");
+    //(id,account，create_time，session_token，isCurrent)
     if(success)
     {
-        qDebug() << u8"user create success";
+       // qDebug() << u8"user create success";
         return true;
     }
     else
     {
-        qDebug() << u8"user create fail";
+        //QSqlError lastError = query.lastError();
+       // qDebug() << u8"user create fail:"+lastError.driverText();
         return false;
     }
 }
@@ -44,16 +53,16 @@ bool DataBase::insert(QString account,QString token)
     QSqlDatabase db = QSqlDatabase::database("aibill"); //建立数据库连接
     QSqlQuery query(db);
     QString current_date_time =QDateTime::currentDateTime().toString();
-    query.prepare("insert into aibill_user values(?, ?, ?, ?,?)");
-    query.bindValue(1, account);
-    query.bindValue(2, current_date_time);
-    query.bindValue(3, token);
-    query.bindValue(4, 1);
+    query.prepare("insert into aibill_user(account,session_token,create_time,isCurrent) values(:account,:session_token,:create_time,:isCurrent)");
+    query.bindValue(":account",account);
+    query.bindValue(":session_token",token);
+    query.bindValue(":create_time",current_date_time);
+    query.bindValue(":isCurrent",1);
     bool success=query.exec();
     if(!success)
     {
         QSqlError lastError = query.lastError();
-        qDebug() << lastError.driverText() << QString(QObject::tr("insert error"));
+        qDebug() <<  u8"insert error:"+lastError.driverText();
         return false;
     }
     return true;
@@ -66,11 +75,11 @@ bool DataBase::queryAll()
     QSqlQuery query(db);
     query.exec("select * from aibill_user");
     QSqlRecord rec = query.record();
-    qDebug() << QObject::tr("aibill_user counter：" ) << rec.count();
+    qDebug() << QObject::tr(u8"aibill_user counter:" )+QString::number(rec.count());
     while(query.next())
     {
         for(int index = 0; index < rec.count(); index++)
-            qDebug() << query.value(index) << "";
+          //  qDebug() << query.value(index) << "";
         qDebug() << "\n";
     }
     return true;
@@ -132,12 +141,28 @@ bool DataBase::sortById()
     bool success=query.exec("select * from aibill_user order by id desc");
     if(success)
     {
-        qDebug() << QObject::tr("排序成功");
+        qDebug() << u8"排序成功!";
         return true;
     }
     else
     {
-        qDebug() << QObject::tr("排序失败！");
+        qDebug() << u8"排序失败！";
+        return false;
+    }
+}
+
+bool DataBase::reset(){
+    QSqlDatabase db = QSqlDatabase::database("aibill"); //建立数据库连接
+    QSqlQuery query(db);
+    bool success=query.exec("update aibill_user set isCurrent=0");
+    if(success)
+    {
+        //qDebug() <<QString::fromUtf8(u8"reset success");
+        return true;
+    }
+    else
+    {
+       // qDebug() << QString::fromUtf8(u8"reset failed");
         return false;
     }
 }

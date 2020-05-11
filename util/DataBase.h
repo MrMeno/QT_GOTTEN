@@ -9,6 +9,7 @@
 #include <QSqlDriver>
 #include <QSqlRecord>
 #include <QTextCodec>
+#include <QSqlQueryModel>
 
 class DataBase
 {
@@ -22,6 +23,8 @@ public:
         bool deleteByname(QString name);  //删除
         bool sortById();          //排序
         bool selectCurrentUser(int isCurrent);
+        bool reset();
+        QSqlDatabase d_b;
 };
 
 #endif // DATABASE_H

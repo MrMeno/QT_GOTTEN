@@ -25,6 +25,11 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="../resources/staics.qrc">
+    <normaloff>:/img/logo.png</normaloff>
+    <normalon>:/img/logo.png</normalon>:/img/logo.png</iconset>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <property name="minimumSize">
     <size>
@@ -140,6 +145,8 @@
    <container>1</container>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="../resources/staics.qrc"/>
+ </resources>
  <connections/>
 </ui>

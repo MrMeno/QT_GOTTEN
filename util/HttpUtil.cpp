@@ -11,10 +11,19 @@
 
 QString __url="";
 QString username="";
+
 HttpUtil::HttpUtil(QObject *parent):QObject(parent)
 {
     m_network = new QNetworkAccessManager(this);
     QObject::connect(m_network, SIGNAL(finished(QNetworkReply*)),this ,SLOT(replyFinished(QNetworkReply*)));
+    DataBase *db=new DataBase();
+    db->createConnection();
+
+    QSqlQueryModel *s=new QSqlQueryModel();
+
+    s->setQuery("select * from aibill_user where isCurrent=1",db->d_b);
+    int count = s->rowCount();
+    qDebug() << QString("counter: %1").arg(count);
 }
 void HttpUtil::get(QUrl(url),std::function<void(QJsonObject json)> call)
 {
@@ -62,12 +71,15 @@ void HttpUtil::replyFinished(QNetworkReply *reply)
 {
     timer->elapsed();
     QJsonObject jsonObject;
+    QVariant var;
+    QJsonValue value;
     cookieJar= this->m_network->cookieJar();
     QList<QNetworkCookie> list= cookieJar->cookiesForUrl(QUrl(QT_HOST));
     for(int i=0;i<list.length();i++)
     {
-        qDebug()<<list[i].name()<<":"<<list[i].value();
+      //qDebug()<<list[i].name()<<":"<<list[i].value();
     };
+
     if(timer->hasExpired(qlonglong(NET_TIME_OUT))){
         QJsonObject res;
         res.insert("code",CODE_SYS_ERROR);
@@ -77,17 +89,11 @@ void HttpUtil::replyFinished(QNetworkReply *reply)
     else{
         QByteArray databuff = reply->readAll();
         jsonObject=PublicHelper::parseQByteArrayToQJsonObject(databuff);
-        QString current_date_time =QDateTime::currentDateTime().toString();
-        if(__url=="/login"){
-            QSqlDatabase db = QSqlDatabase::database("aibill");
-            QSqlQuery sql;
-            bool hasThisUser=sql.exec("select * from aibill_user where account=\'"+username+"\'");
-            if(hasThisUser){
-                qDebug()<<username;
-            }
-            else{
 
-            }
+        var.setValue(list[0].value());
+        if(var.data()!=NULL){
+            value=QJsonValue::fromVariant(var);
+            jsonObject.insert(QString(u8"TICKETSESSIONSID"),value);
         }
     }
     callBack(jsonObject);

@@ -22,6 +22,7 @@ class HttpUtil:public QObject
     Q_OBJECT
 public:
      explicit HttpUtil(QObject *parent=nullptr);
+     void  cookiesMangement();
      void  get( QUrl(url), std::function<void(QJsonObject json)> call);
      void  get(QUrl(url), QJsonObject *p, std::function<void(QJsonObject json)> call);
      void  post(QUrl(url),QJsonObject  *p, std::function<void(QJsonObject json)> call);

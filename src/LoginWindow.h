@@ -10,6 +10,7 @@
 #include "CorePageWindow.h"
 #include "components/drag_win_widget.h"
 #include "util/httpService.h"
+#include <QCloseEvent>
 
 namespace Ui {//所有窗体对象都放在ui命名空间内
 class LoginWindow;//声明登录窗体类
@@ -33,6 +34,7 @@ public:
 private:
       Ui::LoginWindow *ui;
       CorePageWindow *cp;
+      QString loginAccount;
     //此处变量ui等于loginwindow分配的内存地址
     //1、A.B则A为对象或者结构体；
     //2、A->B则A为指针，->是成员提取，A->B是提取A中的成员B，A只能是指向类、结构、联合的指针；
@@ -42,6 +44,8 @@ signals:
 
 public slots:
         void slot_login_keydown();
+protected:
+       // virtual void closeEvent(QCloseEvent* ev)override;
 };
 
 

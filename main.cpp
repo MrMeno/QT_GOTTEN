@@ -8,6 +8,7 @@
 #include "util/DataBase.h"
 #include <QObject>
 #include <QAbstractNativeEventFilter>
+#include <QCloseEvent>
 
 int main(int argc, char *argv[])
 {
@@ -20,7 +21,7 @@ int main(int argc, char *argv[])
      db.createConnection();
     //创建user表
      db.createTable();
-     db.queryAll();
+     db.reset();
     /*加载样式表*/
     PublicHelper *helper=new PublicHelper();
     QStringList strList=helper->getDirName(":/qss");
