@@ -23,6 +23,12 @@ class LoginWindow : public QMainWindow//窗体继承自qt的窗体对象
     //宏：相当于全局条件，根据自身定义的返回结果来替换掉程序中调用它的那部分，主要目的是为了缩减运行时间（宏置换在预处理过程中，宏展开在编译过程中，提升了程序运行效率）
     //此处用于将窗体类中使用宏的地方在预处理时替换，节省运行时间
 public:
+    class LoginInfo
+    {
+        QString code;
+        QString msg;
+        QList<QString> data;
+    };
      LoginWindow(QWidget *parent = nullptr);
     //C++中的explicit关键字只能用于修饰只有一个参数的类构造函数,
     //它的作用是表明该构造函数是显示的, 而非隐式的, 跟它相对应的另一个关键字是implicit,

@@ -13,7 +13,8 @@ public:
     static QString parseQJsonObjectToQString(QJsonObject *repData);
     static QByteArray parseQJsonObjectToQByteArray(QJsonObject *repData);
     static QJsonObject parseQByteArrayToQJsonObject(QByteArray arr);
-    static QString getJsonValue(QJsonObject json,QString name);
+    static QJsonValue getJsonValue(QJsonObject json,QString name);
+    static QVariant getHashValue(QHash<QString,QVariant> h,QString key);
     ~PublicHelper();
 };
 

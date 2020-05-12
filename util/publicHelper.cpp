@@ -3,6 +3,7 @@
 #include <QJsonObject>
 #include <QDebug>
 #include <QJsonDocument>
+#include "util/CodeConstants.h"
 
 PublicHelper::PublicHelper(QObject *parent):QObject(parent)
 {
@@ -62,18 +63,25 @@ QJsonObject PublicHelper::parseQByteArrayToQJsonObject(QByteArray arr)
     return json;
 }
 
-QString PublicHelper::getJsonValue(QJsonObject json,QString name)
+QJsonValue PublicHelper::getJsonValue(QJsonObject json,QString name)
 {
-    QString res="";
+    QJsonValue res;
     if(json.contains(name))
-    {
+     {
       QJsonValue name_value = json.take(name);
-        if(name_value.isString())
-        {
-           res = name_value.toString();
-        }
+      res = name_value;
      }
     return res;
+}
+QVariant PublicHelper::getHashValue(QHash<QString,QVariant> h,QString key){
+    QHash<QString,QVariant>::iterator i;
+    QVariant value;
+    for (i = h.begin();i!=h.end(); ++i) {
+        if(i.key()==key){
+            value= i.value();
+        }
+    }
+    return value;
 }
 
 PublicHelper::~PublicHelper()

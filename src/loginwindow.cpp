@@ -50,48 +50,14 @@ void LoginWindow::httpLogin(){
     LoginDTO->insert("userPass",userPSW.trimmed());
     httpService *serve=new httpService();
     serve->login(LoginDTO,[=](QJsonObject res){
-        QString code=PublicHelper::getJsonValue(res,"code");
-        QString token=PublicHelper::getJsonValue(res,"TICKETSESSIONSID");
-        if(code==CODE_SUCCESS){
-           /*记录此次登录后，java返回的token*/
-            loginAccount=userName;
-            QString current_date_time =QDateTime::currentDateTime().toString();
-            DataBase *db=new DataBase();
-            db->createConnection();
-            QSqlQuery sql(db->d_b);
-            //查询用户是否登录过
-            sql.prepare(QString("select * from aibill_user "
-                                "where account=%1").arg(userName));
-            //登录过则更新上次的token
-            if(sql.exec()){
-                //qDebug()<<"user "+userName+" exist";
-                sql.prepare(QString("update aibill_user set session_token=?,create_time=?,isCurrent=?"
-                                    " where account=?"));
-                sql.bindValue(0,token);
-                sql.bindValue(1,current_date_time);
-                sql.bindValue(2,1);
-                sql.bindValue(3,userName.trimmed());
-                sql.exec();
-                if(!sql.exec()){
-                    // QSqlError error=sql.lastError();
-                    // qDebug()<<"update error:"+error.driverText();
-                }
-                else{
-                   //  qDebug()<<"update success";
-                }
-
-            }
-            //未登录过则新增用户登录的记录
-            else{
-                qDebug()<<userName+":none";
-                 db->insert(userName,token);
-            }
-            /*打开主窗体*/
+        QjsonVector my;
+        my.serializeFromJson(res);
+        if(my.code==CODE_SUCCESS){
+            QVariant id=PublicHelper::getHashValue(my.data_Hash,"id");
             cp=new CorePageWindow(this);
             cp->show();
             this->setHidden(true);
         }else{
-
 
         };});
 }

@@ -4,7 +4,8 @@
 {
 
 }
-
+ Q_DECLARE_METATYPE(QjsonVector)
+ Q_DECLARE_METATYPE(billListVO)
  QString CodeHelper::API_HEARTBEAT= "/heartbeat";
  QString CodeHelper::API_LOGIN= "/login";
  QString CodeHelper::API_CHANGE_PSW= "/free/change/password";
@@ -28,7 +29,12 @@
  QString CodeHelper::API_PUBLISH_INIT= "/bill/publish/init";
  QString CodeHelper::API_PUBLISH_UPLOAD= "/bill/publish/push";
  QString CodeHelper::API_PUBLISH_ACCOUNTLIST= "/bill/publish/get/account";
- QString SESSION = "test";
+ QString SESSION = "";
+ QString USERID ="";
+ QString ORGSHORTNAME="";
+ QString ORGNAME="";
+ QString INVITEURL="";
+ QString USERNAME="";
  CodeHelper::~CodeHelper(){
      delete this;
  }

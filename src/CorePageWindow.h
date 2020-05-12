@@ -15,6 +15,7 @@ class CorePageWindow : public QMainWindow
 
 public:
     explicit CorePageWindow(QWidget *parent = nullptr);
+
     ~CorePageWindow();
 
 private:

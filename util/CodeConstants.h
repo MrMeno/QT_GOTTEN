@@ -14,7 +14,48 @@
 #define CODE_USER_UN_AUTHORIZED "010003"
 
 #include <QObject>
+#include "util/publicHelper.h"
+#include <QJsonObject>
+#include <QVariant>
+#include <QHash>
+#include <QMap>
+#include <QInternal>
+#include <QDebug>
 extern QString SESSION;
+extern QString USERID;
+extern QString ORGSHORTNAME;
+extern QString ORGNAME;
+extern QString INVITEURL;
+extern QString USERNAME;
+struct QjsonVector
+{
+   QString code;
+   QString msg;
+   QHash<QString,QVariant> data_Hash;
+   void serializeFromJson(QJsonObject json){
+      this->code=(PublicHelper::getJsonValue(json,"code")).toString();
+      this->msg=(PublicHelper::getJsonValue(json,"msg")).toString();
+      QJsonObject::Iterator it;
+       for(it=json.begin();it!=json.end();it++){
+           if(it.value().isObject()){
+               QJsonObject d=it.value().toObject();
+             //  qDebug() << d.toVariantHash();
+               data_Hash=d.toVariantHash();
+           }
+       };
+   }
+};
+struct billListVO
+{
+   QString code;
+   QString msg;
+   QJsonObject data;
+   void serializeFromJson(QJsonObject json){
+      this->code=(PublicHelper::getJsonValue(json,"code")).toString();
+      this->msg=(PublicHelper::getJsonValue(json,"msg")).toString();
+     // this->data=(PublicHelper::getJsonValue(json,"data")).toObject();
+   }
+};
 class CodeHelper:public QObject
 {
     Q_OBJECT

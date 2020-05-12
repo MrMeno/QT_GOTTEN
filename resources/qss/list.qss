@@ -15,3 +15,12 @@ background-color:rgba(255,255,255,255);
 border-bottom-left-radius:10px;
 border-bottom-right-radius:10px;
 }
+#list_content>#list_content_data{
+border-width:0px;
+border-left-color:#FFFFFF;
+border-right-color:#FFFFFF;
+border-top-color:#FFFFFF;
+border-bottom-color:#FFFFFF;
+border-style:solid;
+background-color:transparent;
+}

@@ -17,7 +17,7 @@
 #include <QNetworkCookieJar>
 #include <QCache>
 #include "DataBase.h"
-
+extern QString current_url;
 class HttpUtil:public QObject
 {
     Q_OBJECT

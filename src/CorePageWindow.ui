@@ -119,6 +119,16 @@
        <height>560</height>
       </size>
      </property>
+     <widget class="QListWidget" name="list_content_data">
+      <property name="geometry">
+       <rect>
+        <x>5</x>
+        <y>5</y>
+        <width>290</width>
+        <height>550</height>
+       </rect>
+      </property>
+     </widget>
     </widget>
    </widget>
   </widget>
