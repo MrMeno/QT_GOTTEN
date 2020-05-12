@@ -53,7 +53,7 @@ void LoginWindow::httpLogin(){
         QjsonVector my;
         my.serializeFromJson(res);
         if(my.code==CODE_SUCCESS){
-            QVariant id=PublicHelper::getHashValue(my.data_Hash,"id");
+            QVariant id=PublicHelper::getHashValue(my.data,"id");
             cp=new CorePageWindow(this);
             cp->show();
             this->setHidden(true);

@@ -32,13 +32,11 @@ CorePageWindow::CorePageWindow(QWidget *parent) :
     QJsonObject *param =new QJsonObject();
     param->insert("pageNo","1");
      param->insert("pageSize","10");
-     billListVO *my=new billListVO();
+
      serve->getBillList(param,[=](QJsonObject res){
-       qDebug()<< res;
-       my->serializeFromJson(res);
-       if(my->code==CODE_SUCCESS){
-           qDebug()<< my->data;
-       }
+         RestResult *r=new RestResult();
+         r->set(res);
+        qDebug()<< r->data;
      });
 }
 

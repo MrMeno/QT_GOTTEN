@@ -4,8 +4,6 @@
 {
 
 }
- Q_DECLARE_METATYPE(QjsonVector)
- Q_DECLARE_METATYPE(billListVO)
  QString CodeHelper::API_HEARTBEAT= "/heartbeat";
  QString CodeHelper::API_LOGIN= "/login";
  QString CodeHelper::API_CHANGE_PSW= "/free/change/password";
