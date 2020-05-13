@@ -1,5 +1,5 @@
 #设置项目依赖核心类库，既QT对应安装目录下/include的两个类库文件夹
-QT       += core gui network sql
+QT       += core gui network sql script
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 #开发语言的版本
@@ -65,6 +65,6 @@ MOC_DIR      = tmp
 
 DISTFILES +=
 #自己添加的第三方c++库地址
-INCLUDEPATH += $$quote(D:/OpenSSL-Win32/include)
-LIBS +=$$quote(D:/OpenSSL-Win32/lib/libcrypto.lib)
-LIBS +=$$quote(D:/OpenSSL-Win32/lib/libssl.lib)
+INCLUDEPATH += $$quote(E:/OpenSSL-Win32/include)
+LIBS +=$$quote(E:/OpenSSL-Win32/lib/libcrypto.lib)
+LIBS +=$$quote(E:/OpenSSL-Win32/lib/libssl.lib)

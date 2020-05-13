@@ -17,6 +17,7 @@
 #include <QNetworkCookieJar>
 #include <QCache>
 #include "DataBase.h"
+#include <QtScript/QScriptEngine>
 extern QString current_url;
 class HttpUtil:public QObject
 {
@@ -24,11 +25,11 @@ class HttpUtil:public QObject
 public:
      explicit HttpUtil(QObject *parent=nullptr);
      void  cookiesMangement();
-     void  get( QUrl(url), std::function<void(QJsonObject json)> call);
-     void  get(QUrl(url), QJsonObject *p, std::function<void(QJsonObject json)> call);
-     void  post(QUrl(url),QJsonObject  *p, std::function<void(QJsonObject json)> call);
-     void  put(QUrl(url), QJsonObject *p, std::function<void(QJsonObject json)> call);
-     std::function<void(QJsonObject json)> callBack;
+     void  get( QUrl(url), std::function<void(QByteArray json)> call);
+     void  get(QUrl(url), QJsonObject *p, std::function<void(QByteArray json)> call);
+     void  post(QUrl(url),QJsonObject  *p, std::function<void(QByteArray json)> call);
+     void  put(QUrl(url), QJsonObject *p, std::function<void(QByteArray json)> call);
+     std::function<void(QByteArray json)> callBack;
        //virtual QNetworkAccessManager *create(QObject *parent);
      ~HttpUtil();
 signals:

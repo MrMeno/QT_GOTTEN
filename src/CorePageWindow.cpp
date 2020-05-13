@@ -5,14 +5,8 @@
 #include <qgraphicseffect.h>
 #include <QMessageBox>
 #include <QJsonObject>
-#include <iterator>
 #include <qdebug.h>
 #include "util/httpService.h"
-#include <QRegExp>
-#include <QValidator>
-#include "util/DataBase.h"
-#include <QIcon>
-#include <QCache>
 
 CorePageWindow::CorePageWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -26,18 +20,25 @@ CorePageWindow::CorePageWindow(QWidget *parent) :
     shadowEffect->setOffset(0);
     ui->list_top=new drag_win_widget(parent);
     ui->setupUi(this);
-    this->setWindowIcon(QIcon(":/img/logo.png"));
+   // this->setWindowIcon(QIcon(":/img/logo.png"));
     ui->content_core_frame->setGraphicsEffect(shadowEffect);
     httpService *serve=new httpService();
     QJsonObject *param =new QJsonObject();
     param->insert("pageNo","1");
-     param->insert("pageSize","10");
+    param->insert("pageSize","10");
+    serve->getBillList(param,[=](QByteArray arr){
+        QString str(arr);
+        QScriptEngine engine;
+        QScriptValue value=engine.evaluate("json="+str);
+        QScriptValue code=value.property("code");
+        if(code.toString()==CODE_SUCCESS){
+            QScriptValue res_data=value.property("data");
+            qDebug()<<res_data.toString();
+        }
+        else{
 
-     serve->getBillList(param,[=](QJsonObject res){
-         RestResult *r=new RestResult();
-         r->set(res);
-        qDebug()<< r->data;
-     });
+        }
+    });
 }
 
 void CorePageWindow::resizeEvent(QResizeEvent *event){

@@ -10,6 +10,7 @@
 #include <QApplication>
 #include <util/CodeConstants.h>
 
+
 QString username="";
 QString current_url="";
 HttpUtil::HttpUtil(QObject *parent):QObject(parent)
@@ -18,7 +19,7 @@ HttpUtil::HttpUtil(QObject *parent):QObject(parent)
     QObject::connect(m_network, SIGNAL(finished(QNetworkReply*)),this ,SLOT(replyFinished(QNetworkReply*)));
     qDebug()<<"user token="+SESSION;
 }
-void HttpUtil::get(QUrl(url),std::function<void(QJsonObject json)> call)
+void HttpUtil::get(QUrl(url),std::function<void(QByteArray json)> call)
 {
     current_url=url.toString();
     HttpUtil::callBack= std::move(call);
@@ -33,7 +34,7 @@ void HttpUtil::get(QUrl(url),std::function<void(QJsonObject json)> call)
 
 }
 
-void HttpUtil::get(QUrl(url),QJsonObject *p,std::function<void(QJsonObject json)> call)
+void HttpUtil::get(QUrl(url),QJsonObject *p,std::function<void(QByteArray json)> call)
 {
     current_url=url.toString();
     HttpUtil::callBack= std::move(call);
@@ -47,7 +48,7 @@ void HttpUtil::get(QUrl(url),QJsonObject *p,std::function<void(QJsonObject json)
 
 }
 
-void HttpUtil::put(QUrl(url),QJsonObject *p, std::function<void(QJsonObject json)> call)
+void HttpUtil::put(QUrl(url),QJsonObject *p, std::function<void(QByteArray json)> call)
 {
     current_url=url.toString();
     callBack= std::move(call);
@@ -69,27 +70,28 @@ void HttpUtil::put(QUrl(url),QJsonObject *p, std::function<void(QJsonObject json
 void HttpUtil::replyFinished(QNetworkReply *reply)
 {
     timer->elapsed();
-    QJsonObject jsonObject;
+    QByteArray databuff;
     QVariant var_cookie;
     if(timer->hasExpired(qlonglong(NET_TIME_OUT))){
-        QJsonObject res;
-        res.insert("code",CODE_SYS_ERROR);
-        res.insert("msg",CODE_SYS_ERROR_MSG);
-        jsonObject= res;
+        QByteArray res;
+        res.insert('code',QString(CODE_SYS_ERROR).toLatin1().data());
+        res.insert('msg',QString(CODE_SYS_ERROR_MSG).toLatin1().data());
+        databuff= res;
     }
     else{
-        QByteArray databuff = reply->readAll();
-        jsonObject=PublicHelper::parseQByteArrayToQJsonObject(databuff);
-        QjsonVector my;
-        my.serializeFromJson(jsonObject);
-        if((my.code==CODE_SUCCESS)&&(current_url==CodeHelper::API_LOGIN)){
+        databuff = reply->readAll();
+        QString res(databuff);
+        QScriptEngine engine;
+        QScriptValue sc = engine.evaluate("value=" + res);
+        QScriptValue code = sc.property("code");
+        if((code.toString()==CODE_SUCCESS)&&(current_url==CodeHelper::API_LOGIN)){
             cookieJar= this->m_network->cookieJar();
             QList<QNetworkCookie> list= cookieJar->cookiesForUrl(QUrl(QT_HOST));
             var_cookie.setValue(list[0].value());
             SESSION= var_cookie.toString();
         }
     }
-    callBack(jsonObject);
+    callBack(databuff);
     delete timer;
 }
 

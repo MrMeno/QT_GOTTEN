@@ -49,17 +49,17 @@ void LoginWindow::httpLogin(){
     LoginDTO->insert("userNo",userName.trimmed());
     LoginDTO->insert("userPass",userPSW.trimmed());
     httpService *serve=new httpService();
-    serve->login(LoginDTO,[=](QJsonObject res){
-        QjsonVector my;
-        my.serializeFromJson(res);
-        if(my.code==CODE_SUCCESS){
-            QVariant id=PublicHelper::getHashValue(my.data,"id");
+    serve->login(LoginDTO,[=](QByteArray res){
+        QString str(res);
+        QScriptEngine engine;
+        QScriptValue value=engine.evaluate("json="+str);
+        QScriptValue code=value.property("code");
+        if(code.toString()==CODE_SUCCESS){
             cp=new CorePageWindow(this);
             cp->show();
             this->setHidden(true);
-        }else{
-
-        };});
+        }
+    });
 }
 bool LoginWindow::eventFilter(QObject *obj, QEvent *event)
 {
