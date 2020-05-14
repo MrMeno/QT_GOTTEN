@@ -8,5 +8,5 @@ void httpService::login(QJsonObject *LoginDTO,std::function<void(QByteArray json
     http->put(QUrl(CodeHelper::API_LOGIN), LoginDTO, call);
 }
 void httpService::getBillList(QJsonObject *param,std::function<void(QByteArray json)> call){
-    http->get(QUrl(CodeHelper::API_BILL_LIST),param, call);
+    http->get(QUrl(CodeHelper::API_LIST_PAGE),param, call);
 }

@@ -15,7 +15,7 @@ class CorePageWindow : public QMainWindow
 
 public:
     explicit CorePageWindow(QWidget *parent = nullptr);
-
+    void getListPage();
     ~CorePageWindow();
 
 private:
@@ -23,6 +23,7 @@ private:
 
 protected:
     void resizeEvent(QResizeEvent *event) override;
+    void paintEvent(QPaintEvent *event);
 };
 
 #endif // COREPAGEWINDOW_H
