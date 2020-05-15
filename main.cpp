@@ -16,12 +16,12 @@ int main(int argc, char *argv[])
     QApplication::setQuitOnLastWindowClosed(true);
     a.connect(&a,SIGNAL(lastWindowClosed()),&a,SLOT(quit()));
     /*创建本地数据库 */
-     DataBase db;
+  //   DataBase db;
     //链接数据库
-     db.createConnection();
+  //   db.createConnection();
     //创建user表
-     db.createTable();
-     db.reset();
+ //    db.createTable();
+  //   db.reset();
     /*加载样式表*/
     PublicHelper *helper=new PublicHelper();
     QStringList strList=helper->getDirName(":/qss");

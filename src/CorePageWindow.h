@@ -6,6 +6,7 @@
 #include "components/drag_win_widget.h"
 #include "util/HttpUtil.h"
 #include "util/httpService.h"
+#include <QStatusBar>
 namespace Ui {
 class CorePageWindow;
 }
@@ -24,6 +25,7 @@ private:
 protected:
     void resizeEvent(QResizeEvent *event) override;
     void paintEvent(QPaintEvent *event);
+    void setStatusBar(QStatusBar *st);
 };
 
 #endif // COREPAGEWINDOW_H

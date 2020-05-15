@@ -31,7 +31,8 @@ SOURCES += \
             util\PublicHelper.cpp \
           util\HttpUtil.cpp \
     components\drag_win_widget.cpp \
-    util/httpService.cpp
+    util/httpService.cpp \
+    components/bill_list_item.cpp
 
 HEADERS += \
     components\close_label_btn.h \
@@ -43,11 +44,13 @@ HEADERS += \
          util\PublicHelper.h \
           util\HttpUtil.h \
     components\drag_win_widget.h \
-    util/httpService.h
+    util/httpService.h \
+    components/bill_list_item.h
 
 FORMS += \
     src\CorePageWindow.ui \
-    src\LoginWindow.ui
+    src\LoginWindow.ui \
+    components/bill_list_item.ui
 
 TRANSLATIONS += \
     QT_zh_CN.ts

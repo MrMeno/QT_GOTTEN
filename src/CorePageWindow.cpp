@@ -7,6 +7,7 @@
 #include <QJsonObject>
 #include <qdebug.h>
 #include "util/httpService.h"
+#include "components/bill_list_item.h"
 
 CorePageWindow::CorePageWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -22,6 +23,7 @@ CorePageWindow::CorePageWindow(QWidget *parent) :
     ui->setupUi(this);
    // this->setWindowIcon(QIcon(":/img/logo.png"));
     ui->content_core_frame->setGraphicsEffect(shadowEffect);
+    this->setStatusBar(ui->statusBar);
     getListPage();
 }
 void CorePageWindow::getListPage(){
@@ -39,19 +41,18 @@ void CorePageWindow::getListPage(){
             QScriptValue res_page=res_data.property("page");
             QScriptValue res_re=res_page.property("result");
             QList<QVariant> listData=  res_re.toVariant().toList();
+           // QList<bill_list_item> t_model;
 
-           // ui->list_content_data->setViewMode(QListView::ListMode);
             foreach(auto item,listData)
             {
                 QMap<QString,QVariant> map_item=item.toMap();
                 QString billNO=map_item.value("billNo").toString();
                 qDebug()<<billNO;
-               // QListWidgetItem* ui_item=new QListWidgetItem();
+               // bill_list_item bill_item=new bill_list_item(this,map_item);
+              //  t_model.append(bill_item);
 
-
-              //  ui_item->setText(billNO);
-               // ui->list_content_data->addItem(ui_item);
             }
+
 
         }
         else{
@@ -62,10 +63,12 @@ void CorePageWindow::getListPage(){
 void CorePageWindow::resizeEvent(QResizeEvent *event){
     QSize size=this->size();
 
-    ui->content_core_frame->resize(size.width()-18,size.height()-18);
+    ui->content_core_frame->resize(size.width()-45,size.height()-40);
     QSize frame_size=ui->content_core_frame->size();
-    ui->list_content->resize(frame_size.width(),frame_size.height()-205);
+    ui->list_content->resize(frame_size.width(),frame_size.height()-220);
     ui->list_top->resize(frame_size.width(),180);
+    ui->statusBar->resize(frame_size.width()+15,22);
+    ui->statusBar->move(0,frame_size.height()-8);
 }
 void CorePageWindow::paintEvent(QPaintEvent* e)
 {
@@ -74,6 +77,11 @@ void CorePageWindow::paintEvent(QPaintEvent* e)
     QPainter p(this);
     style()->drawPrimitive(QStyle::PE_Widget, &option, &p, this);
 }
+void CorePageWindow::setStatusBar(QStatusBar *st){
+    st->resize(this->width()-20,22);
+    st->move(0,this->height()-18);
+}
+
 CorePageWindow::~CorePageWindow()
 {
     delete ui;

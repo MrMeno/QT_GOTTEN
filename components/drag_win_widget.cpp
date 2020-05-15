@@ -5,6 +5,7 @@ drag_win_widget::drag_win_widget(QWidget *parent):QWidget(parent)
      father= parent;
 
 
+
 }
 void drag_win_widget::mousePressEvent(QMouseEvent *event){
     //当鼠标左键点击时.
@@ -14,7 +15,6 @@ void drag_win_widget::mousePressEvent(QMouseEvent *event){
            //记录鼠标的世界坐标.
            m_startPoint = event->globalPos();
            //记录窗体的世界坐标.
-
            m_windowPoint = this->father->parentWidget()->parentWidget()->frameGeometry().topLeft();
        }
 }
