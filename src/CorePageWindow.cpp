@@ -72,6 +72,7 @@ void CorePageWindow::resizeEvent(QResizeEvent *event){
     ui->list_content->resize(frame_size.width(),frame_size.height()-220);
     ui->list_top->resize(frame_size.width(),180);
     ui->statusBar->resize(frame_size.width()+15,22);
+    ui->list_scroll->resize(frame_size.width(),frame_size.height()-220);
     ui->statusBar->move(0,frame_size.height()-8);
 }
 void CorePageWindow::paintEvent(QPaintEvent* e)
