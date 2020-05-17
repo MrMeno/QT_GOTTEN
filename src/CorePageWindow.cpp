@@ -7,7 +7,8 @@
 #include <QJsonObject>
 #include <qdebug.h>
 #include "util/httpService.h"
-#include "components/bill_list_item.h"
+#include <QScrollArea>
+#include "components/bill_list_widget.h"
 
 CorePageWindow::CorePageWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -41,17 +42,20 @@ void CorePageWindow::getListPage(){
             QScriptValue res_page=res_data.property("page");
             QScriptValue res_re=res_page.property("result");
             QList<QVariant> listData=  res_re.toVariant().toList();
-           // QList<bill_list_item> t_model;
-
-            foreach(auto item,listData)
+            /*  QList<QVariant>::iterator i;
+            int counter=1;
+            for(i=listData.begin();i!=listData.end();++i)
             {
-                QMap<QString,QVariant> map_item=item.toMap();
+                counter++;
+                QMap<QString,QVariant> map_item=i->toMap();
                 QString billNO=map_item.value("billNo").toString();
                 qDebug()<<billNO;
-               // bill_list_item bill_item=new bill_list_item(this,map_item);
-              //  t_model.append(bill_item);
 
-            }
+
+            }*/
+            bill_list_widget *content=new bill_list_widget(this);
+            content->initWidget(listData);
+            ui->list_scroll->setWidget(content);
 
 
         }

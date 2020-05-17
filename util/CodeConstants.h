@@ -22,7 +22,6 @@
 #include <QInternal>
 #include <QDebug>
 #include <QVector>
-#include "util/vo/VO.h"
 extern QString SESSION;
 extern QString USERID;
 extern QString ORGSHORTNAME;

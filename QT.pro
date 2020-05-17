@@ -10,7 +10,7 @@ CONFIG += c++11
 # depend on your compiler). Please consult the documentation of the
 # deprecated API in order to know how to port your code away from it.
 # 条件编译 语法过期提醒
-DEFINES += QT_DEPRECATED_WARNINGS UTF8
+DEFINES += QT_DEPRECATED_WARNINGS
 
 # You can also make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
@@ -21,36 +21,33 @@ RC_ICONS = \
       resources\img\logo.png
 #项目结构
 SOURCES += \
+    components\bill_list_widget.cpp \
     main.cpp \
     components\close_label_btn.cpp \
            src\CorePageWindow.cpp \
            src\LoginWindow.cpp \
-    util/DataBase.cpp \
-    util/vo/VO.cpp \
+    util\DataBase.cpp \
     util\CodeConstants.cpp \
             util\PublicHelper.cpp \
           util\HttpUtil.cpp \
     components\drag_win_widget.cpp \
-    util/httpService.cpp \
-    components/bill_list_item.cpp
+    util\httpService.cpp \
 
 HEADERS += \
+    components\bill_list_widget.h \
     components\close_label_btn.h \
            src\LoginWindow.h \
            src\CorePageWindow.h \
-    util/DataBase.h \
-    util/vo/VO.h \
+    util\DataBase.h \
     util\CodeConstants.h \
          util\PublicHelper.h \
           util\HttpUtil.h \
     components\drag_win_widget.h \
-    util/httpService.h \
-    components/bill_list_item.h
+    util\httpService.h \
 
 FORMS += \
     src\CorePageWindow.ui \
     src\LoginWindow.ui \
-    components/bill_list_item.ui
 
 TRANSLATIONS += \
     QT_zh_CN.ts
@@ -68,6 +65,6 @@ MOC_DIR      = tmp
 
 DISTFILES +=
 #自己添加的第三方c++库地址
-INCLUDEPATH += $$quote(E:/OpenSSL-Win32/include)
-LIBS +=$$quote(E:/OpenSSL-Win32/lib/libcrypto.lib)
-LIBS +=$$quote(E:/OpenSSL-Win32/lib/libssl.lib)
+INCLUDEPATH += $$quote(D:/OpenSSL-Win32/include)
+LIBS +=$$quote(D:/OpenSSL-Win32/lib/libcrypto.lib)
+LIBS +=$$quote(D:/OpenSSL-Win32/lib/libssl.lib)
