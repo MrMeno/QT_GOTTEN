@@ -7,6 +7,7 @@
 #include "util/HttpUtil.h"
 #include "util/httpService.h"
 #include <QStatusBar>
+#include <QScrollArea>
 namespace Ui {
 class CorePageWindow;
 }
@@ -17,11 +18,12 @@ class CorePageWindow : public QMainWindow
 public:
     explicit CorePageWindow(QWidget *parent = nullptr);
     void getListPage();
+    void topInit();
+    int pageSize;
+    int pageNo;
     ~CorePageWindow();
-
 private:
     Ui::CorePageWindow *ui;
-
 protected:
     void resizeEvent(QResizeEvent *event) override;
     void paintEvent(QPaintEvent *event);

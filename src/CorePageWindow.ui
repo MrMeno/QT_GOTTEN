@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>330</width>
+    <width>350</width>
     <height>900</height>
    </rect>
   </property>
@@ -72,7 +72,7 @@
      <rect>
       <x>9</x>
       <y>9</y>
-      <width>312</width>
+      <width>332</width>
       <height>900</height>
      </rect>
     </property>
@@ -120,7 +120,7 @@
       <rect>
        <x>0</x>
        <y>0</y>
-       <width>312</width>
+       <width>332</width>
        <height>180</height>
       </rect>
      </property>
@@ -169,8 +169,8 @@
       <rect>
        <x>0</x>
        <y>180</y>
-       <width>312</width>
-       <height>680</height>
+       <width>332</width>
+       <height>720</height>
       </rect>
      </property>
      <widget class="QScrollArea" name="list_scroll">
@@ -178,8 +178,8 @@
        <rect>
         <x>1</x>
         <y>1</y>
-        <width>300</width>
-        <height>680</height>
+        <width>320</width>
+        <height>720</height>
        </rect>
       </property>
       <property name="sizePolicy">
@@ -208,8 +208,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>300</width>
-         <height>680</height>
+         <width>320</width>
+         <height>720</height>
         </rect>
        </property>
       </widget>

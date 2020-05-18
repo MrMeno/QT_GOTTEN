@@ -9,6 +9,7 @@ class bill_list_widget:public QWidget
 public:
    explicit  bill_list_widget(QWidget *parent = 0);
     void initWidget(QList<QVariant>& list);
+     QString exBackWord(QString exname);
 };
 
 #endif // BILL_LIST_ITEM_H
