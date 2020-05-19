@@ -13,6 +13,7 @@
 #include <util/publicHelper.h>
 #include <QTime>
 #include "util/DataBase.h"
+ #include "util/DllHelper.h"
 
 LoginWindow::LoginWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -40,9 +41,17 @@ LoginWindow::LoginWindow(QWidget *parent) :
     ui->userName->setText("13556886172");
     ui->userPsw->setText("m123456");
     QObject::connect(ui->userPsw,SIGNAL(returnPressed()),this,SLOT(slot_login_keydown()));
+
+      //qDebug()<<GetDesktopWindow();
+      HWND S=::GetDesktopWindow();
+      HWND s=::GetWindow(S,5);
+
+      qDebug()<<s;
+
 }
 
 void LoginWindow::httpLogin(){
+
     QString userName=ui->userName->text();
     QString userPSW=ui->userPsw->text();
     QJsonObject *LoginDTO =new QJsonObject();

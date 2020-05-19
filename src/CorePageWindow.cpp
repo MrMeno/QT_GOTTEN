@@ -190,9 +190,9 @@ void CorePageWindow::topInit(){
 void CorePageWindow::getListPage(){
     httpService *serve=new httpService();
     QJsonObject *param =new QJsonObject();
-    // QMovie *movie = new QMovie(":/img/loading.gif");
-    // ui->loading->setMovie(movie);
-    // movie->start();
+     QMovie *movie = new QMovie(":/img/loading.gif");
+     ui->loading->setMovie(movie);
+     movie->start();
     param->insert("pageNo",QString::number(pageNo));
     param->insert("pageSize",QString::number(pageSize));
     param->insert("searchContent",searchContent);
@@ -209,7 +209,7 @@ void CorePageWindow::getListPage(){
             bill_list_widget *content=new bill_list_widget(this);
             content->initWidget(listData);
             ui->list_scroll->setWidget(content);
-            // movie->stop();
+             movie->stop();
         }
         else{
 

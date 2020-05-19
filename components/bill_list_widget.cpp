@@ -82,6 +82,7 @@ void bill_list_widget::initWidget(QList<QVariant>& list)
         endorsor_key->setText("背书人");
         //样式-》数据
         QString isBankType=(billMedia=="银票")?"#E59762":"#1991EB";
+        grid->setRowMinimumHeight(8,80);
         //组件拼接
         grid->addWidget(billMedia_value,1,1,1,1,Qt::AlignLeft);
 
@@ -103,7 +104,7 @@ void bill_list_widget::initWidget(QList<QVariant>& list)
         grid->addWidget(exWidget,8,1,1,4,Qt::AlignLeft);
         //样式-》全局
         content->setStyleSheet("#list_item"
-                               "{background-color:white;font-family:HanSans}"
+                               "{background-color:white;font-family:HanSans;}"
                                "#item_key"
                                "{color:'#C7C7C7';font-size:12px;}"
                                "#item_title"
@@ -111,7 +112,6 @@ void bill_list_widget::initWidget(QList<QVariant>& list)
                                 "#ex_label"
                                "{color:white;border-radius:2px;padding:0px 5px}");
         content->setLayout(grid);
-        content->setMinimumHeight(200);
         layout->addWidget(content);
     }
     this->setLayout(layout);
