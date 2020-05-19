@@ -54,6 +54,11 @@ void LoginWindow::httpLogin(){
         QScriptEngine engine;
         QScriptValue value=engine.evaluate("json="+str);
         QScriptValue code=value.property("code");
+        QScriptValue data=value.property("data");
+        QScriptValue userName=data.property("userName");
+        QScriptValue orgName=data.property("orgName");
+        USERNAME=userName.toString();
+         ORGNAME=orgName.toString();
         if(code.toString()==CODE_SUCCESS){
             cp=new CorePageWindow(this);
             cp->show();

@@ -1,5 +1,6 @@
 #include "./src/LoginWindow.h"
 #include <QApplication>
+#include <QCoreApplication>
 #include <qfile.h>
 #include <qdir.h>
 #include <QDebug>
@@ -9,6 +10,9 @@
 #include <QObject>
 #include <QAbstractNativeEventFilter>
 #include <QCloseEvent>
+#include <QStringList>
+#include <QtFontDatabaseSupport/QtFontDatabaseSupport>
+#include <QFont>
 
 int main(int argc, char *argv[])
 {
@@ -22,6 +26,22 @@ int main(int argc, char *argv[])
     //创建user表
  //    db.createTable();
   //   db.reset();
+     /*加载字体*/
+    QString dir = QCoreApplication::applicationDirPath();
+    QStringList fontList;
+    fontList.clear();
+    int aiFontId = QFontDatabase::addApplicationFont(":/font/HanSans.ttf");
+    if (aiFontId != -1) // -1为加载失败
+    {
+        fontList << QFontDatabase::applicationFontFamilies(aiFontId);
+    }
+    qDebug()<<"family"<<QFontDatabase::applicationFontFamilies(aiFontId);
+    if (!fontList.isEmpty())
+    {
+        QFont font;
+        font.setFamily(fontList.at(0));
+        QApplication::setFont(font);
+    }
     /*加载样式表*/
     PublicHelper *helper=new PublicHelper();
     QStringList strList=helper->getDirName(":/qss");

@@ -1,6 +1,7 @@
 #ifndef COREPAGEWINDOW_H
 #define COREPAGEWINDOW_H
 #include <QMainWindow>
+#include <QEvent>
 #include <QMouseEvent>
 #include <QObject>
 #include "components/drag_win_widget.h"
@@ -21,9 +22,13 @@ public:
     void topInit();
     int pageSize;
     int pageNo;
+    QString searchContent;
+    bool eventFilter(QObject *obj, QEvent *event);
     ~CorePageWindow();
 private:
     Ui::CorePageWindow *ui;
+public slots:
+   void searchBoxEnter();
 protected:
     void resizeEvent(QResizeEvent *event) override;
     void paintEvent(QPaintEvent *event);

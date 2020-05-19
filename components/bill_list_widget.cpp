@@ -103,9 +103,9 @@ void bill_list_widget::initWidget(QList<QVariant>& list)
         grid->addWidget(exWidget,8,1,1,4,Qt::AlignLeft);
         //样式-》全局
         content->setStyleSheet("#list_item"
-                               "{background-color:white;font-family:'Micosoft Yahei'}"
+                               "{background-color:white;font-family:HanSans}"
                                "#item_key"
-                               "{color:'#C7C7C7';font-size:11px;}"
+                               "{color:'#C7C7C7';font-size:12px;}"
                                "#item_title"
                                "{font-size:15px;color:'"+isBankType+"';font-weight:bold}"
                                 "#ex_label"

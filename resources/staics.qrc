@@ -6,5 +6,15 @@
         <file>qss/common.qss</file>
         <file>qss/login.qss</file>
         <file>qss/list.qss</file>
+        <file>font/SourceHanSansCN-Medium.ttf</file>
+        <file>font/HanSans.ttf</file>
+        <file>img/icon-home.png</file>
+        <file>img/icon-set.png</file>
+        <file>img/icon-top.png</file>
+        <file>img/switcher.png</file>
+        <file>img/arrow-down.png</file>
+        <file>img/arrow-up.png</file>
+        <file>img/icon-refresh.png</file>
+        <file>img/loading.gif</file>
     </qresource>
 </RCC>

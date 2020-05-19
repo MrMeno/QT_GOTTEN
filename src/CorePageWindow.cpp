@@ -11,6 +11,12 @@
 #include <QPainter>
 #include "components/bill_list_widget.h"
 #include <QLayout>
+#include <QLabel>
+#include <QImage>
+#include <QPushButton>
+#include <QLineEdit>
+#include <QMovie>
+#include <QKeyEvent>
 CorePageWindow::CorePageWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::CorePageWindow)
@@ -20,6 +26,7 @@ CorePageWindow::CorePageWindow(QWidget *parent) :
     ui->setupUi(this);
     this->pageNo=1;
     this->pageSize=5;
+    this->searchContent="";
     this->setStatusBar(ui->statusBar);
     topInit();
     getListPage();
@@ -35,9 +42,145 @@ void CorePageWindow::topInit(){
     shadowEffect->setOffset(0);
     ui->content_core_frame->setGraphicsEffect(shadowEffect);
     QGridLayout *topLayout=new QGridLayout(this);
-   // QLabel *imgLabel=new QLabel();
-   // imgLabel.setPixmap();
-   // topLayout->addItem(logo,1,1,1,1,Qt::AlignLeft);
+    //控件声明
+    QLabel *imgLabel=new QLabel();//logo
+    QLabel *titleLabel=new QLabel();//title
+    QLabel *homeLabel=new QLabel();//home
+    QLabel *setLabel=new QLabel();//设置
+    QLabel *topLabel=new QLabel();//置顶
+    QLabel *divLabel=new QLabel();//分隔
+    QLabel *closeLabel=new QLabel();//关闭
+    QLabel *minLabel=new QLabel();//最小化
+    QLabel *userNameLabel=new QLabel();//用户名
+    QLabel *orgLabel=new QLabel();//机构名称
+    QLabel *orgDivLabel=new QLabel();//机构名称分隔
+    QPushButton *ticketLftBtn=new QPushButton("添加票面",this);
+    QIcon up(":/img/arrow-up.png");
+    QIcon down(":/img/arrow-down.png");
+    QIcon fresh(":/img/icon-refresh.png");
+    QPushButton *ticketRightBtn=new QPushButton(down,"",this);//签票按钮
+    QLabel *signKeyLabel=new QLabel();//签票户
+    QLabel *signValueLabel=new QLabel();//签票户
+    QLabel *signLLabel=new QLabel();//签票户
+    QLabel *signEditLabel=new QLabel();//签票户编辑
+    QPushButton *refresh=new QPushButton(fresh,"",this);//刷新按钮
+    refresh->setObjectName("refresh");
+    refresh->installEventFilter(this);
+    QLineEdit *searchBox=new QLineEdit();//搜索框
+    searchBox->setObjectName("searchContent");
+    searchBox->installEventFilter(this);
+    QObject::connect(searchBox,SIGNAL(returnPressed()),this,SLOT(searchBoxEnter()));
+    //空间内容
+
+    QImage *lo=new QImage(20,20,QImage::Format_RGB32);
+    if(lo->load(":/img/logo.png")){
+        imgLabel->setMaximumSize(48,48);
+        imgLabel->setPixmap(QPixmap::fromImage(*lo));
+        imgLabel->setScaledContents(true);
+    }
+    QImage *lo_home=new QImage(16,16,QImage::Format_RGB32);
+    if(lo_home->load(":/img/icon-home.png")){
+        homeLabel->setMaximumSize(16,16);
+        homeLabel->setPixmap(QPixmap::fromImage(*lo_home));
+        homeLabel->setScaledContents(true);
+    }
+    QImage *lo_set=new QImage(16,16,QImage::Format_RGB32);
+    if(lo_set->load(":/img/icon-set.png")){
+        setLabel->setMaximumSize(16,16);
+        setLabel->setPixmap(QPixmap::fromImage(*lo_set));
+        setLabel->setScaledContents(true);
+    }
+    QImage *lo_top=new QImage(16,16,QImage::Format_RGB32);
+    if(lo_top->load(":/img/icon-top.png")){
+        topLabel->setMaximumSize(16,16);
+        topLabel->setPixmap(QPixmap::fromImage(*lo_top));
+        topLabel->setScaledContents(true);
+    }
+    QImage *lo_close=new QImage(16,16,QImage::Format_RGB32);
+    if(lo_close->load(":/img/icon_close.png")){
+        closeLabel->setMaximumSize(16,16);
+        closeLabel->setPixmap(QPixmap::fromImage(*lo_close));
+        closeLabel->setScaledContents(true);
+    }
+    QImage *lo_min=new QImage(16,16,QImage::Format_RGB32);
+    if(lo_min->load(":/img/icon_remove.png")){
+        minLabel->setMaximumSize(16,16);
+        minLabel->setPixmap(QPixmap::fromImage(*lo_min));
+        minLabel->setScaledContents(true);
+    }
+    QImage *lo_switch=new QImage(10,10,QImage::Format_RGB32);
+    if(lo_switch->load(":/img/switcher.png")){
+        orgDivLabel->setMaximumSize(10,10);
+        orgDivLabel->setPixmap(QPixmap::fromImage(*lo_switch));
+        orgDivLabel->setScaledContents(true);
+    }
+    titleLabel->setText("小ai签票");
+    divLabel->setText("|");
+    signKeyLabel->setText("签票户 ");
+    signValueLabel->setText("2122121221");
+    signLLabel->setText("杭州银行");
+    signEditLabel->setText("编辑");
+    QFontMetrics elideFont(orgLabel->font());
+    orgLabel->setText(elideFont.elidedText(ORGNAME, Qt::ElideRight, ui->list_top->width()*0.42));
+    userNameLabel->setText(USERNAME);
+
+    //样式调整
+    refresh->setCursor(Qt::PointingHandCursor);
+    minLabel->setCursor(Qt::PointingHandCursor);
+    closeLabel->setCursor(Qt::PointingHandCursor);
+    ticketLftBtn->setCursor(Qt::PointingHandCursor);
+    titleLabel->setStyleSheet("color:white;");
+    orgLabel->setStyleSheet("color:white;");
+    userNameLabel->setStyleSheet("color:white;font-size:14px;");
+    divLabel->setStyleSheet("color:white;");
+    ticketLftBtn->setStyleSheet("background-color:white;"
+                                "color:#555C78;"
+                                "border-top-left-radius:16px;"
+                                "border-bottom-left-radius:16px;"
+                                "width:77px;height:32px");
+    ticketRightBtn->setStyleSheet("background-color:white;"
+                                  "color:#555C78;"
+                                  "border-top-right-radius:16px;"
+                                  "border-left:1px solid #eeeeee;"
+                                  "border-bottom-right-radius:16px;"
+                                  "width:32px;height:32px");
+    signKeyLabel->setStyleSheet("color:white;");
+    signValueLabel->setStyleSheet("color:rgba(255,255,255,0.5);");
+    signLLabel->setStyleSheet("color:rgba(255,255,255,0.5);");
+    signEditLabel->setStyleSheet("color:white;");
+    refresh->setStyleSheet("width:30px;"
+                           "height:30px;"
+                           "border-radius:15px;"
+                           "background-color:rgba(255,255,255,0.2);");
+    searchBox->setStyleSheet("width:'"+QString::number((ui->list_top->width())*0.7)+"'px;"
+                                                                                    "height:30px;"
+                                                                                    "border-radius:15px;"
+                                                                                    "color:white;"
+                                                                                    "padding:0 0 0 10px;"
+                                                                                    "background-color:rgba(255,255,255,0.2);");
+    //植入控件
+    topLayout->setVerticalSpacing(10);
+    topLayout->setHorizontalSpacing(0);
+    topLayout->addWidget(imgLabel,1,1,1,1,Qt::AlignRight);//row1
+    topLayout->addWidget(titleLabel,1,2,1,2,Qt::AlignLeft);
+    topLayout->addWidget(homeLabel,1,7,1,2,Qt::AlignCenter);
+    topLayout->addWidget(setLabel,1,8,1,2,Qt::AlignCenter);
+    topLayout->addWidget(topLabel,1,9,1,2,Qt::AlignCenter);
+    topLayout->addWidget(divLabel,1,10,1,2,Qt::AlignCenter);
+    topLayout->addWidget(minLabel,1,11,1,2,Qt::AlignRight);
+    topLayout->addWidget(closeLabel,1,12,1,2,Qt::AlignRight);
+
+    topLayout->addWidget(userNameLabel,3,1,1,3,Qt::AlignVCenter);//row2
+    topLayout->addWidget(ticketLftBtn,3,8,2,3,Qt::AlignBottom|Qt::AlignRight);//row3+4
+    topLayout->addWidget(ticketRightBtn,3,11,2,2,Qt::AlignBottom|Qt::AlignLeft);
+    topLayout->addWidget(orgLabel,4,1,1,5,Qt::AlignLeft);//row4
+    topLayout->addWidget(orgDivLabel,4,6,1,1,Qt::AlignLeft);
+    topLayout->addWidget(signKeyLabel,5,1,1,1,Qt::AlignLeft);//row5
+    topLayout->addWidget(signValueLabel,5,2,1,4,Qt::AlignLeft);
+    topLayout->addWidget(signLLabel,5,6,1,3,Qt::AlignLeft);
+    topLayout->addWidget(signEditLabel,5,11,1,3,Qt::AlignRight);
+    topLayout->addWidget(refresh,6,1,2,2,Qt::AlignLeft);//row6+7
+    topLayout->addWidget(searchBox,6,3,2,10,Qt::AlignLeft);
     ui->list_top->setLayout(topLayout);
 }
 /*
@@ -47,9 +190,12 @@ void CorePageWindow::topInit(){
 void CorePageWindow::getListPage(){
     httpService *serve=new httpService();
     QJsonObject *param =new QJsonObject();
-
+    // QMovie *movie = new QMovie(":/img/loading.gif");
+    // ui->loading->setMovie(movie);
+    // movie->start();
     param->insert("pageNo",QString::number(pageNo));
     param->insert("pageSize",QString::number(pageSize));
+    param->insert("searchContent",searchContent);
     serve->getBillList(param,[=](QByteArray arr){
         QString str(arr);
         QScriptEngine engine;
@@ -63,6 +209,7 @@ void CorePageWindow::getListPage(){
             bill_list_widget *content=new bill_list_widget(this);
             content->initWidget(listData);
             ui->list_scroll->setWidget(content);
+            // movie->stop();
         }
         else{
 
@@ -84,6 +231,9 @@ void CorePageWindow::resizeEvent(QResizeEvent *event){
     ui->list_scroll->resize(frame_size.width(),frame_size.height()-220);
     ui->statusBar->move(0,frame_size.height()-8);
 }
+void CorePageWindow::searchBoxEnter(){
+    getListPage();
+}
 /*
  * @
    组件重载样式
@@ -94,6 +244,43 @@ void CorePageWindow::paintEvent(QPaintEvent* e)
     option.init(this);
     QPainter p(this);
     style()->drawPrimitive(QStyle::PE_Widget, &option, &p, this);
+}
+bool CorePageWindow::eventFilter(QObject *obj, QEvent *event)
+{
+    if (obj->objectName()=="refresh")//指定某个QLabel
+    {
+        if (event->type() == QEvent::MouseButtonPress) //鼠标点击
+        {
+            QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event); // 事件转换
+            if(mouseEvent->button() == Qt::LeftButton)
+            {
+                pageNo=1;
+                getListPage();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            return false;
+        }
+    }
+    if(obj->objectName()=="searchContent"){
+        if (event->type() == QEvent::InputMethod){
+              //QInputMethod *inputEvent = dynamic_cast<QInputMethod*>(event);
+               QLineEdit *s=qobject_cast<QLineEdit*>(obj);
+               searchContent=s->text();
+               qDebug()<<searchContent;
+        }
+        else{
+            return false;
+        }
+    }
+
+    return false;
 }
 /*
  * @
