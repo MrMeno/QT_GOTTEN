@@ -17,6 +17,8 @@
 #include <QLineEdit>
 #include <QMovie>
 #include <QKeyEvent>
+
+
 CorePageWindow::CorePageWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::CorePageWindow)
@@ -45,24 +47,34 @@ void CorePageWindow::topInit(){
     //控件声明
     QLabel *imgLabel=new QLabel();//logo
     QLabel *titleLabel=new QLabel();//title
+    titleLabel->setObjectName("titleLabel");
     QLabel *homeLabel=new QLabel();//home
     QLabel *setLabel=new QLabel();//设置
     QLabel *topLabel=new QLabel();//置顶
     QLabel *divLabel=new QLabel();//分隔
+    divLabel->setObjectName("divLabel");
     QLabel *closeLabel=new QLabel();//关闭
     QLabel *minLabel=new QLabel();//最小化
     QLabel *userNameLabel=new QLabel();//用户名
+     userNameLabel->setObjectName("userNameLabel");
     QLabel *orgLabel=new QLabel();//机构名称
+     orgLabel->setObjectName("orgLabel");
     QLabel *orgDivLabel=new QLabel();//机构名称分隔
     QPushButton *ticketLftBtn=new QPushButton("添加票面",this);
+    ticketLftBtn->setObjectName("ticketLftBtn");
     QIcon up(":/img/arrow-up.png");
     QIcon down(":/img/arrow-down.png");
     QIcon fresh(":/img/icon-refresh.png");
     QPushButton *ticketRightBtn=new QPushButton(down,"",this);//签票按钮
+    ticketRightBtn->setObjectName("ticketRightBtn");
     QLabel *signKeyLabel=new QLabel();//签票户
+    signKeyLabel->setObjectName("signKeyLabel");
     QLabel *signValueLabel=new QLabel();//签票户
+    signValueLabel->setObjectName("signValueLabel");
     QLabel *signLLabel=new QLabel();//签票户
+    signLLabel->setObjectName("signLLabel");
     QLabel *signEditLabel=new QLabel();//签票户编辑
+    signEditLabel->setObjectName("signEditLabel");
     QPushButton *refresh=new QPushButton(fresh,"",this);//刷新按钮
     refresh->setObjectName("refresh");
     refresh->installEventFilter(this);
@@ -129,35 +141,7 @@ void CorePageWindow::topInit(){
     minLabel->setCursor(Qt::PointingHandCursor);
     closeLabel->setCursor(Qt::PointingHandCursor);
     ticketLftBtn->setCursor(Qt::PointingHandCursor);
-    titleLabel->setStyleSheet("color:white;");
-    orgLabel->setStyleSheet("color:white;");
-    userNameLabel->setStyleSheet("color:white;font-size:14px;");
-    divLabel->setStyleSheet("color:white;");
-    ticketLftBtn->setStyleSheet("background-color:white;"
-                                "color:#555C78;"
-                                "border-top-left-radius:16px;"
-                                "border-bottom-left-radius:16px;"
-                                "width:77px;height:32px");
-    ticketRightBtn->setStyleSheet("background-color:white;"
-                                  "color:#555C78;"
-                                  "border-top-right-radius:16px;"
-                                  "border-left:1px solid #eeeeee;"
-                                  "border-bottom-right-radius:16px;"
-                                  "width:32px;height:32px");
-    signKeyLabel->setStyleSheet("color:white;");
-    signValueLabel->setStyleSheet("color:rgba(255,255,255,0.5);");
-    signLLabel->setStyleSheet("color:rgba(255,255,255,0.5);");
-    signEditLabel->setStyleSheet("color:white;");
-    refresh->setStyleSheet("width:30px;"
-                           "height:30px;"
-                           "border-radius:15px;"
-                           "background-color:rgba(255,255,255,0.2);");
-    searchBox->setStyleSheet("width:'"+QString::number((ui->list_top->width())*0.7)+"'px;"
-                                                                                    "height:30px;"
-                                                                                    "border-radius:15px;"
-                                                                                    "color:white;"
-                                                                                    "padding:0 0 0 10px;"
-                                                                                    "background-color:rgba(255,255,255,0.2);");
+   // searchBox->setStyleSheet("width:'"+QString::number((ui->list_top->width())*0.7)+"'px;");
     //植入控件
     topLayout->setVerticalSpacing(10);
     topLayout->setHorizontalSpacing(0);
@@ -190,9 +174,9 @@ void CorePageWindow::topInit(){
 void CorePageWindow::getListPage(){
     httpService *serve=new httpService();
     QJsonObject *param =new QJsonObject();
-     QMovie *movie = new QMovie(":/img/loading.gif");
-     ui->loading->setMovie(movie);
-     movie->start();
+    //QMovie *movie = new QMovie(":/img/loading.gif");
+    //ui->loading->setMovie(movie);
+    //movie->start();
     param->insert("pageNo",QString::number(pageNo));
     param->insert("pageSize",QString::number(pageSize));
     param->insert("searchContent",searchContent);
@@ -205,11 +189,12 @@ void CorePageWindow::getListPage(){
             QScriptValue res_data=value.property("data");
             QScriptValue res_page=res_data.property("page");
             QScriptValue res_re=res_page.property("result");
+            //qDebug()<<ui->scrollAreaWidgetContents;
             QList<QVariant> listData=  res_re.toVariant().toList();
             bill_list_widget *content=new bill_list_widget(this);
             content->initWidget(listData);
             ui->list_scroll->setWidget(content);
-             movie->stop();
+            //  movie->stop();
         }
         else{
 
@@ -232,6 +217,7 @@ void CorePageWindow::resizeEvent(QResizeEvent *event){
     ui->statusBar->move(0,frame_size.height()-8);
 }
 void CorePageWindow::searchBoxEnter(){
+
     getListPage();
 }
 /*
@@ -255,6 +241,8 @@ bool CorePageWindow::eventFilter(QObject *obj, QEvent *event)
             if(mouseEvent->button() == Qt::LeftButton)
             {
                 pageNo=1;
+                pageSize=5;
+                searchContent="";
                 getListPage();
                 return true;
             }
@@ -269,11 +257,11 @@ bool CorePageWindow::eventFilter(QObject *obj, QEvent *event)
         }
     }
     if(obj->objectName()=="searchContent"){
-        if (event->type() == QEvent::InputMethod){
-              //QInputMethod *inputEvent = dynamic_cast<QInputMethod*>(event);
-               QLineEdit *s=qobject_cast<QLineEdit*>(obj);
-               searchContent=s->text();
-               qDebug()<<searchContent;
+        if (event->type() == QEvent::KeyRelease||event->type() == QEvent::FocusIn){
+            //QInputMethod *inputEvent = dynamic_cast<QInputMethod*>(event);
+            QLineEdit *s=qobject_cast<QLineEdit*>(obj);
+            this->searchContent=s->text();
+            qDebug()<<searchContent;
         }
         else{
             return false;

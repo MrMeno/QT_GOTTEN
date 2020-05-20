@@ -4,6 +4,7 @@ border-top-left-radius:10px;
 border-top-right-radius:10px;
 border-bottom-left-radius:10px;
 border-bottom-right-radius:10px;
+font-family:,Helvetica,HanSans,sans-serif;
 
 }
 QWidget#list_top{
@@ -11,12 +12,55 @@ background-color:qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba
 border-top-left-radius:10px;
 border-top-right-radius:10px;
 }
+#list_top>#refresh{
+width:30px;
+height:30px;
+border-radius:15px;
+background-color:rgba(255,255,255,0.2);
+}
+#list_top>#refresh:hover{
+background-color:rgba(255,255,255,0.3);
+}
+#list_top>#ticketLftBtn{
+background-color:white;
+ color:#555C78;
+ border-top-left-radius:16px;
+ border-bottom-left-radius:16px;
+ width:77px;height:32px;
+}
+#list_top>#ticketRightBtn{
+background-color:white;
+color:#555C78;
+border-top-right-radius:16px;
+border-left:1px solid #eeeeee;
+border-bottom-right-radius:16px;
+width:32px;height:32px;
+}
 #content_core_frame>#list_content{
 background-color:rgba(255,255,255,255);
 border-bottom-left-radius:10px;
 border-bottom-right-radius:10px;
 
 }
+#list_top>#searchContent{
+height:30px;
+border-radius:15px;
+color:white;
+min-width:210px;
+padding:0 0 0 10px;
+background-color:rgba(255,255,255,0.2);
+}
+#list_top>#userNameLabel{
+ color:white;
+ font-size:14px;
+}
+#list_top>#signKeyLabel,#signEditLabel,#divLabel,#titleLabel{
+ color:white;
+}
+#list_top>#signValueLabel,#signLLabel,#orgLabel{
+color:rgba(255,255,255,0.5);
+}
+
 #list_content>#list_content_data{
 border-width:0px;
 border-left-color:#FFFFFF;

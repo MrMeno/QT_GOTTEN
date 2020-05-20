@@ -47,7 +47,7 @@ HEADERS += \
          util\PublicHelper.h \
           util\HttpUtil.h \
     components\drag_win_widget.h \
-    util\httpService.h \
+    util\httpService.h
 
 FORMS += \
     src\CorePageWindow.ui \
@@ -67,9 +67,11 @@ RESOURCES += \
 OBJECTS_DIR  = tmp
 MOC_DIR      = tmp
 
-DISTFILES +=
+DISTFILES += \
+    util/shdocvw.dll \
+    util/shdocvw.dll
 #自己添加的第三方c++库地址
-INCLUDEPATH += $$quote(D:/OpenSSL-Win32/include)
-LIBS +=$$quote(D:/OpenSSL-Win32/lib/libcrypto.lib)
-LIBS +=$$quote(D:/OpenSSL-Win32/lib/libssl.lib)
-LIBS +=User32.LIB
+INCLUDEPATH += $$quote(E:/OpenSSL-Win32/include)
+LIBS +=$$quote(E:/OpenSSL-Win32/lib/libcrypto.lib)
+LIBS +=$$quote(E:/OpenSSL-Win32/lib/libssl.lib)
+
