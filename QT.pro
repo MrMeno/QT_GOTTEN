@@ -1,5 +1,5 @@
 #设置项目依赖核心类库，既QT对应安装目录下/include的两个类库文件夹
-QT       += core gui network sql script
+QT       += core gui network sql script axcontainer
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 #开发语言的版本
@@ -34,6 +34,7 @@ SOURCES += \
           util\HttpUtil.cpp \
     components\drag_win_widget.cpp \
     util\httpService.cpp \
+    util/shdocvw.cpp
 
 HEADERS += \
     components\bill_list_widget.h \
@@ -47,7 +48,8 @@ HEADERS += \
          util\PublicHelper.h \
           util\HttpUtil.h \
     components\drag_win_widget.h \
-    util\httpService.h
+    util\httpService.h \
+    util/shdocvw.h
 
 FORMS += \
     src\CorePageWindow.ui \

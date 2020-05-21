@@ -14,7 +14,7 @@
 #include <QTime>
 #include "util/DataBase.h"
  #include "util/DllHelper.h"
-
+#include "util/ScreenUtil.h"
 LoginWindow::LoginWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::LoginWindow)
@@ -45,8 +45,8 @@ LoginWindow::LoginWindow(QWidget *parent) :
       HWND s=::GetWindow(S,5);
       HWND hwnd = (HWND)QWidget::winId();
       qDebug()<< S <<s << hwnd;
-
-
+      ScreenUtil *sr=new ScreenUtil(this);
+      sr->getHTMLDocument(s);
 }
 
 void LoginWindow::httpLogin(){

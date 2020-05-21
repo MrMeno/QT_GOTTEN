@@ -4,14 +4,18 @@
 #include <windows.h>
 #include <winuser.h>
 #include <oleacc.h>
+#include <initguid.h>
 #include <oleauto.h>
 #include <comdef.h>
 #include <shobjidl.h>
 #include <QWidget>
 #include <ActiveQt/QAxWidget>
-#include <ActiveQt/qaxbase.h>
+#include <ActiveQt/QAxBase>
 #include <ActiveQt/QAxObject>
+#include <ActiveQt/ActiveQtDepends>
 #include <mshtml.h>
+#include "util/shdocvw.h"
+#include <comdef.h>
 
 class ScreenUtil:public QObject
 {
@@ -19,7 +23,6 @@ class ScreenUtil:public QObject
 public:
    explicit ScreenUtil(QObject *parent = nullptr);
   void getHTMLDocument(HWND hwnd);
-    ~ScreenUtil();
 };
 
 #endif // SCREENUTIL_H
