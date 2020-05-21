@@ -17,6 +17,7 @@
 #include <QLineEdit>
 #include <QMovie>
 #include <QKeyEvent>
+#include "./src/MaskWindow.h"
 
 
 CorePageWindow::CorePageWindow(QWidget *parent) :
@@ -44,7 +45,7 @@ void CorePageWindow::topInit(){
     shadowEffect->setOffset(0);
     ui->content_core_frame->setGraphicsEffect(shadowEffect);
     QGridLayout *topLayout=new QGridLayout(this);
-    //控件声明
+    //控件声明初始化
     QLabel *imgLabel=new QLabel();//logo
     QLabel *titleLabel=new QLabel();//title
     titleLabel->setObjectName("titleLabel");
@@ -56,9 +57,9 @@ void CorePageWindow::topInit(){
     QLabel *closeLabel=new QLabel();//关闭
     QLabel *minLabel=new QLabel();//最小化
     QLabel *userNameLabel=new QLabel();//用户名
-     userNameLabel->setObjectName("userNameLabel");
+    userNameLabel->setObjectName("userNameLabel");
     QLabel *orgLabel=new QLabel();//机构名称
-     orgLabel->setObjectName("orgLabel");
+    orgLabel->setObjectName("orgLabel");
     QLabel *orgDivLabel=new QLabel();//机构名称分隔
     QPushButton *ticketLftBtn=new QPushButton("添加票面",this);
     ticketLftBtn->setObjectName("ticketLftBtn");
@@ -77,13 +78,14 @@ void CorePageWindow::topInit(){
     signEditLabel->setObjectName("signEditLabel");
     QPushButton *refresh=new QPushButton(fresh,"",this);//刷新按钮
     refresh->setObjectName("refresh");
-    refresh->installEventFilter(this);
     QLineEdit *searchBox=new QLineEdit();//搜索框
     searchBox->setObjectName("searchContent");
-    searchBox->installEventFilter(this);
-    QObject::connect(searchBox,SIGNAL(returnPressed()),this,SLOT(searchBoxEnter()));
-    //空间内容
-
+    //事件绑定
+      ticketRightBtn->installEventFilter(this);
+      searchBox->installEventFilter(this);
+      refresh->installEventFilter(this);
+      QObject::connect(searchBox,SIGNAL(returnPressed()),this,SLOT(searchBoxEnter()));
+    //数据绑定
     QImage *lo=new QImage(20,20,QImage::Format_RGB32);
     if(lo->load(":/img/logo.png")){
         imgLabel->setMaximumSize(48,48);
@@ -135,14 +137,13 @@ void CorePageWindow::topInit(){
     QFontMetrics elideFont(orgLabel->font());
     orgLabel->setText(elideFont.elidedText(ORGNAME, Qt::ElideRight, ui->list_top->width()*0.42));
     userNameLabel->setText(USERNAME);
-
     //样式调整
     refresh->setCursor(Qt::PointingHandCursor);
     minLabel->setCursor(Qt::PointingHandCursor);
     closeLabel->setCursor(Qt::PointingHandCursor);
     ticketLftBtn->setCursor(Qt::PointingHandCursor);
-   // searchBox->setStyleSheet("width:'"+QString::number((ui->list_top->width())*0.7)+"'px;");
-    //植入控件
+    // searchBox->setStyleSheet("width:'"+QString::number((ui->list_top->width())*0.7)+"'px;");
+    //控件排版
     topLayout->setVerticalSpacing(10);
     topLayout->setHorizontalSpacing(0);
     topLayout->addWidget(imgLabel,1,1,1,1,Qt::AlignRight);//row1
@@ -153,7 +154,6 @@ void CorePageWindow::topInit(){
     topLayout->addWidget(divLabel,1,10,1,2,Qt::AlignCenter);
     topLayout->addWidget(minLabel,1,11,1,2,Qt::AlignRight);
     topLayout->addWidget(closeLabel,1,12,1,2,Qt::AlignRight);
-
     topLayout->addWidget(userNameLabel,3,1,1,3,Qt::AlignVCenter);//row2
     topLayout->addWidget(ticketLftBtn,3,8,2,3,Qt::AlignBottom|Qt::AlignRight);//row3+4
     topLayout->addWidget(ticketRightBtn,3,11,2,2,Qt::AlignBottom|Qt::AlignLeft);
@@ -165,6 +165,7 @@ void CorePageWindow::topInit(){
     topLayout->addWidget(signEditLabel,5,11,1,3,Qt::AlignRight);
     topLayout->addWidget(refresh,6,1,2,2,Qt::AlignLeft);//row6+7
     topLayout->addWidget(searchBox,6,3,2,10,Qt::AlignLeft);
+    //填充控件
     ui->list_top->setLayout(topLayout);
 }
 /*
@@ -233,7 +234,7 @@ void CorePageWindow::paintEvent(QPaintEvent* e)
 }
 bool CorePageWindow::eventFilter(QObject *obj, QEvent *event)
 {
-    if (obj->objectName()=="refresh")//指定某个QLabel
+    if (obj->objectName()=="refresh")//刷新事件
     {
         if (event->type() == QEvent::MouseButtonPress) //鼠标点击
         {
@@ -256,18 +257,33 @@ bool CorePageWindow::eventFilter(QObject *obj, QEvent *event)
             return false;
         }
     }
-    if(obj->objectName()=="searchContent"){
+    if(obj->objectName()=="searchContent"){//搜索框enter事件
         if (event->type() == QEvent::KeyRelease||event->type() == QEvent::FocusIn){
             //QInputMethod *inputEvent = dynamic_cast<QInputMethod*>(event);
             QLineEdit *s=qobject_cast<QLineEdit*>(obj);
             this->searchContent=s->text();
             qDebug()<<searchContent;
+            return true;
         }
         else{
             return false;
         }
     }
-
+    if(obj->objectName()=="ticketLftBtn"){//签票事件
+        if (event->type() == QEvent::MouseButtonPress) //鼠标点击
+        {
+            QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event); // 事件转换
+            if(mouseEvent->button() == Qt::LeftButton)
+            {
+                MaskWindow mask;
+                mask.show();
+            }
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
     return false;
 }
 /*

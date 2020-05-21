@@ -16,5 +16,6 @@
         <file>img/arrow-up.png</file>
         <file>img/icon-refresh.png</file>
         <file>img/loading.gif</file>
+        <file>qss/mask.qss</file>
     </qresource>
 </RCC>

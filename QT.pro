@@ -24,6 +24,7 @@ SOURCES += \
     components\bill_list_widget.cpp \
     main.cpp \
     components\close_label_btn.cpp \
+    src/MaskWindow.cpp \
            src\CorePageWindow.cpp \
            src\LoginWindow.cpp \
     util\DllHelper.cpp \
@@ -34,11 +35,12 @@ SOURCES += \
           util\HttpUtil.cpp \
     components\drag_win_widget.cpp \
     util\httpService.cpp \
-    util/shdocvw.cpp
+    util\shdocvw.cpp
 
 HEADERS += \
     components\bill_list_widget.h \
     components\close_label_btn.h \
+    src/MaskWindow.h \
            src\LoginWindow.h \
            src\CorePageWindow.h \
     util\DllHelper.h \
@@ -49,9 +51,10 @@ HEADERS += \
           util\HttpUtil.h \
     components\drag_win_widget.h \
     util\httpService.h \
-    util/shdocvw.h
+    util\shdocvw.h
 
 FORMS += \
+    src/MaskWindow.ui \
     src\CorePageWindow.ui \
     src\LoginWindow.ui \
 
@@ -69,11 +72,8 @@ RESOURCES += \
 OBJECTS_DIR  = tmp
 MOC_DIR      = tmp
 
-DISTFILES += \
-    util/shdocvw.dll \
-    util/shdocvw.dll
 #自己添加的第三方c++库地址
-INCLUDEPATH += $$quote(E:/OpenSSL-Win32/include)
-LIBS +=$$quote(E:/OpenSSL-Win32/lib/libcrypto.lib)
-LIBS +=$$quote(E:/OpenSSL-Win32/lib/libssl.lib)
+INCLUDEPATH += $$quote(D:/OpenSSL-Win32/include)
+LIBS +=$$quote(D:/OpenSSL-Win32/lib/libcrypto.lib)
+LIBS +=$$quote(D:/OpenSSL-Win32/lib/libssl.lib)
 

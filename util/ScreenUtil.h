@@ -1,5 +1,10 @@
 #ifndef SCREENUTIL_H
 #define SCREENUTIL_H
+#ifndef _UNICODE
+#define _T(x) L ## x
+#else
+#define _T(x) (x)
+#endif
 #include <QObject>
 #include <windows.h>
 #include <winuser.h>

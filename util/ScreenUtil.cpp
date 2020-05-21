@@ -1,7 +1,8 @@
 #include "ScreenUtil.h"
-//typedef _com_ptr_t <_com_IIID<IHTMLDocument2, &__uuidof(IHTMLDocument2)>> IHTMLDocument2Ptr;
 _COM_SMARTPTR_TYPEDEF(IHTMLDocument2, IID_IHTMLDocument2);
 _COM_SMARTPTR_TYPEDEF(IHTMLElement, IID_IHTMLElement);
+_COM_SMARTPTR_TYPEDEF(IHTMLWindow2, IID_IHTMLWindow2);
+_COM_SMARTPTR_TYPEDEF(IDispatch, IID_IDispatch);
 ScreenUtil::ScreenUtil(QObject *parent):QObject(parent)
 {
 
@@ -10,25 +11,24 @@ ScreenUtil::ScreenUtil(QObject *parent):QObject(parent)
 void ScreenUtil::getHTMLDocument(HWND hwndIE){
     CoInitialize(NULL);
     IHTMLDocument2Ptr pDoc2;
-    QString strTemp="";
-    LPCWSTR LIBS= _T("OLEACC.DLL");
-    HINSTANCE hinst=::LoadLibrary(LIBS);
+    HINSTANCE hinst=::LoadLibraryA(_T("OLEACC.DLL"));
     if(hinst!=NULL) {
     LRESULT lres;
-    UINT unMsg=::RegisterWindowMessage("WM_HTML_GETOBJECT");
+    UINT unMsg=::RegisterWindowMessageA(_T("WM_HTML_GETOBJECT"));
     ::SendMessageTimeout(hwndIE,unMsg,0L,0L,SMTO_ABORTIFHUNG,1000,(DWORD*)&lres);
-    LPFNOBJECTFROMLRESULT pfObjectFromLresult=(LPFNOBJECTFROMLRESULT)::GetProcAddress(hinst,"ObjectFromLresult");
+    LPFNOBJECTFROMLRESULT pfObjectFromLresult=(LPFNOBJECTFROMLRESULT)::GetProcAddress(hinst,_T("ObjectFromLresult"));
     if(pfObjectFromLresult!=NULL) {
-    HRESULT hres;
+    HRESULT hres,hrec;
     hres=(*pfObjectFromLresult)(lres,IID_IHTMLDocument2,0,(void**)&pDoc2);
     if(SUCCEEDED(hres)) {
     IHTMLElementPtr pHtmlElem;
+    IDispatchPtr spDisp;
+    IHTMLWindow2Ptr spWin;
+     hrec= pDoc2->get_Script( &spDisp);
     hres=pDoc2->get_body(&pHtmlElem);
-    BSTR bstrText=NULL;
-    pHtmlElem->get_innerText(&bstrText);
-    _bstr_t _bstrTemp(bstrText,false);
-    //strTemp=(char*)_bstr_t(bstrText);
-    strTemp=(char*)_bstrTemp;
+    spWin = spDisp;
+    spWin->get_document( &pDoc2 );
+
     }
     }
     ::FreeLibrary(hinst);
