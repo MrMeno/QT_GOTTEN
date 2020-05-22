@@ -10,10 +10,11 @@
 #include <winuser.h>
 
 //extern WINUSERAPI HWND GetDesktopWindow(void);
-//extern WINUSERAPI HWND GetWindow(HWND,int);
+
 class DllHelper
 {
 public:
+
     DllHelper();
 
 };

@@ -8,26 +8,40 @@
 #include <QObject>
 #include <windows.h>
 #include <winuser.h>
-#include <oleacc.h>
-#include <initguid.h>
-#include <oleauto.h>
-#include <comdef.h>
-#include <shobjidl.h>
 #include <QWidget>
-#include <ActiveQt/QAxWidget>
-#include <ActiveQt/QAxBase>
-#include <ActiveQt/QAxObject>
-#include <ActiveQt/ActiveQtDepends>
-#include <mshtml.h>
-#include "util/shdocvw.h"
-#include <comdef.h>
+#include <QTimer>
+#include "util/ScreenCaputredEvent.h"
+#include <QPoint>
+struct HandleRect
+{
+    HWND hwnd;
+    RECT wndRect;
+    HandleRect() {}
+};
 
 class ScreenUtil:public QObject
 {
     Q_OBJECT
 public:
-   explicit ScreenUtil(QObject *parent = nullptr);
-  void getHTMLDocument(HWND hwnd);
+    ScreenCaputredEvent *ScreenCaputred;
+    QEvent *ScreenCaputreCancelled;
+    HandleRect GetCursorPosWndRect(QPoint p);
+    bool IsPointInRect(QPoint p,RECT t);
+    void StartCaputre(int timeOutSeconds,QObject sender);
+    void StartCaputre(int timeOutSeconds, QSize size);
+    void OnScreenCaputred(QObject sender,RECT clipRegion);
+    void OnScreenCaputreCancelled(QObject sender);
+    void OnWaitTimmerTick(QObject sender,QEvent e);
+    explicit ScreenUtil(QObject *parent = nullptr);
+signals:
+    void sendData(int,QSize);
+private:
+    RECT *waitRect;
+    QTimer waitTimmer;
+    QPoint *waitPoint;
+    QObject *paramSender;
+    QList<HandleRect> *hwndRectList;
+    void InitWndHandleRect();
 };
 
 #endif // SCREENUTIL_H

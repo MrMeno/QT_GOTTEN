@@ -35,7 +35,9 @@ SOURCES += \
           util\HttpUtil.cpp \
     components\drag_win_widget.cpp \
     util\httpService.cpp \
-    util\shdocvw.cpp
+    util\shdocvw.cpp \
+    util/service/bankConfirmService.cpp \
+    util/ScreenCaputredEvent.cpp
 
 HEADERS += \
     components\bill_list_widget.h \
@@ -51,7 +53,9 @@ HEADERS += \
           util\HttpUtil.h \
     components\drag_win_widget.h \
     util\httpService.h \
-    util\shdocvw.h
+    util\shdocvw.h \
+    util/service/bankConfirmService.h \
+    util/ScreenCaputredEvent.h
 
 FORMS += \
     src/MaskWindow.ui \
@@ -73,7 +77,7 @@ OBJECTS_DIR  = tmp
 MOC_DIR      = tmp
 
 #自己添加的第三方c++库地址
-INCLUDEPATH += $$quote(D:/OpenSSL-Win32/include)
-LIBS +=$$quote(D:/OpenSSL-Win32/lib/libcrypto.lib)
-LIBS +=$$quote(D:/OpenSSL-Win32/lib/libssl.lib)
+INCLUDEPATH += $$quote(E:/OpenSSL-Win32/include)
+LIBS +=$$quote(E:/OpenSSL-Win32/lib/libcrypto.lib)
+LIBS +=$$quote(E:/OpenSSL-Win32/lib/libssl.lib)
 

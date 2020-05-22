@@ -17,7 +17,6 @@
 #include <QLineEdit>
 #include <QMovie>
 #include <QKeyEvent>
-#include "./src/MaskWindow.h"
 
 
 CorePageWindow::CorePageWindow(QWidget *parent) :
@@ -81,7 +80,7 @@ void CorePageWindow::topInit(){
     QLineEdit *searchBox=new QLineEdit();//搜索框
     searchBox->setObjectName("searchContent");
     //事件绑定
-      ticketRightBtn->installEventFilter(this);
+      ticketLftBtn->installEventFilter(this);
       searchBox->installEventFilter(this);
       refresh->installEventFilter(this);
       QObject::connect(searchBox,SIGNAL(returnPressed()),this,SLOT(searchBoxEnter()));
@@ -142,7 +141,6 @@ void CorePageWindow::topInit(){
     minLabel->setCursor(Qt::PointingHandCursor);
     closeLabel->setCursor(Qt::PointingHandCursor);
     ticketLftBtn->setCursor(Qt::PointingHandCursor);
-    // searchBox->setStyleSheet("width:'"+QString::number((ui->list_top->width())*0.7)+"'px;");
     //控件排版
     topLayout->setVerticalSpacing(10);
     topLayout->setHorizontalSpacing(0);
@@ -275,8 +273,8 @@ bool CorePageWindow::eventFilter(QObject *obj, QEvent *event)
             QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event); // 事件转换
             if(mouseEvent->button() == Qt::LeftButton)
             {
-                MaskWindow mask;
-                mask.show();
+                 mask=new MaskWindow(this);
+                 mask->show();
             }
             return true;
         }

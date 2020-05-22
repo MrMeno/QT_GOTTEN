@@ -1,82 +1,95 @@
 #include "ScreenUtil.h"
-_COM_SMARTPTR_TYPEDEF(IHTMLDocument2, IID_IHTMLDocument2);
-_COM_SMARTPTR_TYPEDEF(IHTMLElement, IID_IHTMLElement);
-_COM_SMARTPTR_TYPEDEF(IHTMLWindow2, IID_IHTMLWindow2);
-_COM_SMARTPTR_TYPEDEF(IDispatch, IID_IDispatch);
+#include "src/MaskWindow.h"
 ScreenUtil::ScreenUtil(QObject *parent):QObject(parent)
 {
 
 }
 
-void ScreenUtil::getHTMLDocument(HWND hwndIE){
-    CoInitialize(NULL);
-    IHTMLDocument2Ptr pDoc2;
-    HINSTANCE hinst=::LoadLibraryA(_T("OLEACC.DLL"));
-    if(hinst!=NULL) {
-    LRESULT lres;
-    UINT unMsg=::RegisterWindowMessageA(_T("WM_HTML_GETOBJECT"));
-    ::SendMessageTimeout(hwndIE,unMsg,0L,0L,SMTO_ABORTIFHUNG,1000,(DWORD*)&lres);
-    LPFNOBJECTFROMLRESULT pfObjectFromLresult=(LPFNOBJECTFROMLRESULT)::GetProcAddress(hinst,_T("ObjectFromLresult"));
-    if(pfObjectFromLresult!=NULL) {
-    HRESULT hres,hrec;
-    hres=(*pfObjectFromLresult)(lres,IID_IHTMLDocument2,0,(void**)&pDoc2);
-    if(SUCCEEDED(hres)) {
-    IHTMLElementPtr pHtmlElem;
-    IDispatchPtr spDisp;
-    IHTMLWindow2Ptr spWin;
-     hrec= pDoc2->get_Script( &spDisp);
-    hres=pDoc2->get_body(&pHtmlElem);
-    spWin = spDisp;
-    spWin->get_document( &pDoc2 );
 
-    }
-    }
-    ::FreeLibrary(hinst);
-    }
-    CoUninitialize();
-    CoInitialize(NULL);
-   /* QAxWidget *webWidget=new QAxWidget();
-    webWidget->setControl(QString::fromUtf8("{8856F961-340A-11D0-A96B-00C04FD705A2}"));
-    char *output = NULL;
-    QAxObject *document = webWidget->querySubObject("Document");
-    if(document){
-        IHTMLDocument2 *doc2 = nullptr;
-        document->queryInterface(QUuid(IID_IHTMLDocument2), (void**)&doc2);
-        if (doc2)
+ScreenUtil::GetCursorPosWndRect(QPoint p){
+    HandleRect *reshdlRect = new HandleRect();
+    reshdlRect->hwnd = 0;
+    foreach (auto element,hwndRectList)
+    {
+        HandleRect element_= qobject_cast<HandleRect *>(element);
+        if (IsPointInRect(p, element_.wndRect))
         {
-            IPersistStreamInit *pPSI=NULL;
-            IStream *pStream=NULL;
-            HGLOBAL hHTMLText;
-            if (SUCCEEDED(doc2->QueryInterface(&pPSI)))
-            {
-                const int MaxBuffSize =64*1024;
-                hHTMLText = GlobalAlloc(GMEM_FIXED, MaxBuffSize);
-                CreateStreamOnHGlobal(hHTMLText, TRUE, &pStream);
-                pPSI->Save(pStream, FALSE);
-                LARGE_INTEGER li;
-                li.QuadPart = 0;
-                pStream->Seek(li,0,NULL);
-                output = new char[MaxBuffSize];
-                output[MaxBuffSize-1] = 0;
-                ULONG readed = 0;
-                pStream->Read((void*)output,MaxBuffSize-1,&readed);
-                output[readed] = 0;
-                pStream->Release();
-                //GlobalFree(hHTMLText);
-                pPSI->Release();
-            }
-            doc2->Release();
+            reshdlRect = element_;
+            return reshdlRect;
         }
     }
-    if(output)
-    {
-        qDebug()<<QString::fromUtf8(output);
-
-        delete[] output;
-    }
-    else
-    {
-        qDebug()<<QString::fromUtf8("control fail");
-    }*/
 }
 
+bool ScreenUtil::IsPointInRect(QPoint pt,RECT rt){
+    long reWidth=rt.right-rt.left;
+    long reHeight=rt.bottom-rt.top;
+    if (pt.x() >= rt.left && pt.y() >= rt.top&& pt.x() <= rt.left + reWidth &&pt.y()<= rt.top + reHeight)
+    {
+        return true;
+    }
+    else
+        return false;
+}
+
+void ScreenUtil::InitWndHandleRect(){
+    hwndRectList->clear();
+    HandleRect *hdlRect = new HandleRect();
+    hdlRect->hwnd = ::GetDesktopWindow();
+    RECT rc;
+    hdlRect->hwnd = ::GetWindow(hdlRect->hwnd, 5);
+    while ((int)(hdlRect->hwnd)!= 0)
+    {
+        ::GetWindowRect(hdlRect->hwnd,&rc);
+        if (IsWindowVisible(hdlRect->hwnd))
+        {
+            hdlRect->wndRect = new RECT(rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top);
+            hwndRectList->append(hdlRect);
+        }
+        hdlRect->hwnd = GetWindow(hdlRect->,2);
+    }
+}
+
+
+ScreenUtil::StartCaputre(int timeOutSeconds,QObject sender){
+    paramSender = sender;
+    StartCaputre(timeOutSeconds, NULL);
+}
+
+
+ScreenUtil::StartCaputre(int timeOutSeconds,QSize *size){
+    InitWndHandleRect();
+    MaskWindow *mask = new MaskWindow(this);
+    emit sendData(timeOutSeconds,size);
+    mask->show();
+}
+
+
+ScreenUtil::OnScreenCaputred(QObject sender, RECT clipRegion){
+    int sWidth=(int)(clipRegion.right-clipRegion.left)/2;
+    int sHeight=(int)(clipRegion.bottom-clipRegion.top)/2;
+    if (ScreenCaputred != null)
+    {
+        waitPoint = new QPoint((int)(clipRegion.left + sWidth),(int)(clipRegion.top + sHeight));
+        waitRect = clipRegion;
+        if (waitTimmer == NULL)
+        {
+            waitTimmer = new QTimer();
+        }
+        waitTimmer.setInterval(300);
+        waitTimmer.Start();
+    }
+}
+
+void ScreenUtil::OnWaitTimmerTick(QObject sender,QEvent e){
+    waitTimmer.stop();
+    HWND handel = ::WindowFromPoint(waitPoint);
+    ScreenCaputred(sender,new ScreenCaputredEventArgs(handel, paramSender));
+}
+
+void ScreenUtil::OnScreenCaputreCancelled(QObject sender){
+    if (ScreenCaputreCancelled != NULL)
+    {
+        ScreenCaputreCancelled(sender,NULL);
+
+    }
+}

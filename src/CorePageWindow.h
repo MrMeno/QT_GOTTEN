@@ -9,6 +9,7 @@
 #include "util/httpService.h"
 #include <QStatusBar>
 #include <QScrollArea>
+#include "./src/MaskWindow.h"
 namespace Ui {
 class CorePageWindow;
 }
@@ -27,6 +28,7 @@ public:
     ~CorePageWindow();
 private:
     Ui::CorePageWindow *ui;
+    MaskWindow *mask;
 public slots:
    void searchBoxEnter();
 protected:

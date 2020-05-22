@@ -5,7 +5,8 @@
 #include <QObject>
 #include <QDesktopWidget>
 #include <QSize>
-#include <QApplication>
+
+
 namespace Ui {
 class MaskWindow;
 }
@@ -16,10 +17,16 @@ class MaskWindow : public QMainWindow
 
 public:
     explicit MaskWindow(QWidget *parent = nullptr);
-    ~MaskWindow();
 
+    ~MaskWindow();
+public slots:
+    void getData(int timeSecond,QSize size);
 private:
     Ui::MaskWindow *ui;
+    int timeSecond;
+    QSize size;
+protected:
+    void mouseDoubleClickEvent(QMouseEvent*);
 };
 
 #endif // MASKWINDOW_H
