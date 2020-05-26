@@ -275,6 +275,7 @@ bool CorePageWindow::eventFilter(QObject *obj, QEvent *event)
             {
                  mask=new MaskWindow(this);
                  mask->show();
+                 CorePageWindow::setVisibility(false);
             }
             return true;
         }
@@ -288,6 +289,9 @@ bool CorePageWindow::eventFilter(QObject *obj, QEvent *event)
  * @
    设置状态栏位置
 */
+void CorePageWindow::setVisibility(bool isShow){
+     this->setVisible(isShow);
+}
 void CorePageWindow::setStatusBar(QStatusBar *st){
     st->resize(this->width()-20,22);
     st->move(0,this->height()-18);

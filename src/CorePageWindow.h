@@ -9,6 +9,7 @@
 #include "util/httpService.h"
 #include <QStatusBar>
 #include <QScrollArea>
+#include <QApplication>
 #include "./src/MaskWindow.h"
 namespace Ui {
 class CorePageWindow;
@@ -16,7 +17,6 @@ class CorePageWindow;
 class CorePageWindow : public QMainWindow
 {
     Q_OBJECT
-
 public:
     explicit CorePageWindow(QWidget *parent = nullptr);
     void getListPage();
@@ -24,6 +24,7 @@ public:
     int pageSize;
     int pageNo;
     QString searchContent;
+    void setVisibility(bool isShow);
     bool eventFilter(QObject *obj, QEvent *event);
     ~CorePageWindow();
 private:

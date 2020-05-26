@@ -10,7 +10,6 @@
 #include <winuser.h>
 #include <QWidget>
 #include <QTimer>
-#include "util/ScreenCaputredEvent.h"
 #include <QPoint>
 class ScreenUtil:public QObject
 {

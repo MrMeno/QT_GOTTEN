@@ -17,8 +17,8 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    QApplication::setQuitOnLastWindowClosed(true);
-    a.connect(&a,SIGNAL(lastWindowClosed()),&a,SLOT(quit()));
+    QApplication::setQuitOnLastWindowClosed(false);
+    //a.connect(&a,SIGNAL(lastWindowClosed()),&a,SLOT(quit()));
     /*创建本地数据库 */
   //   DataBase db;
     //链接数据库

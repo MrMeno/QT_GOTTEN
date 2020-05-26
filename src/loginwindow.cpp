@@ -41,12 +41,6 @@ LoginWindow::LoginWindow(QWidget *parent) :
     ui->userName->setText("13556886172");
     ui->userPsw->setText("m123456");
     QObject::connect(ui->userPsw,SIGNAL(returnPressed()),this,SLOT(slot_login_keydown()));
-//      HWND S=::GetDesktopWindow();
-//      HWND s=::GetWindow(S,5);
-//      HWND hwnd = (HWND)QWidget::winId();
-//      qDebug()<< S <<s << hwnd;
-//      ScreenUtil *sr=new ScreenUtil(this);
-//      sr->getHTMLDocument(s);
 }
 
 void LoginWindow::httpLogin(){
