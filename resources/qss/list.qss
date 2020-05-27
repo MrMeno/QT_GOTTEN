@@ -1,5 +1,5 @@
 #content_core_frame{
-background-color: rgba(255,255,255,255);
+background-color: rgba(255,255,255,1);
 border-top-left-radius:10px;
 border-top-right-radius:10px;
 border-bottom-left-radius:10px;
@@ -68,5 +68,26 @@ border-right-color:#FFFFFF;
 border-top-color:#FFFFFF;
 border-bottom-color:#FFFFFF;
 border-style:solid;
-background-color:transparent;
+background-color:white;
+}
+#list_item{
+background-color:white;
+font-family:HanSans;
+max-height:300px;
+border-radius:5px;
+}
+#list_item:hover{
+border:1px solid rgba(200,200,200,0.3);
+background-color:rgba(240,240,240,0.8);
+}
+#item_key{
+color:'#C7C7C7';
+font-size:12px;
+}
+#ex_label{
+color:white;
+border-radius:2px;
+padding:0px 5px;
+min-width:50px;
+max-height:35px;
 }

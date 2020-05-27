@@ -27,7 +27,9 @@ void bill_list_widget::initWidget(QList<QVariant>& list)
         //声明动态组件
         QWidget *content = new QWidget(this);//item最外层div
         content->setObjectName("list_item");
+        content->setCursor(Qt::PointingHandCursor);
         QGridLayout *grid=new QGridLayout(this);//item最外层div布局
+        grid->setObjectName("list_item_fluid");
         QLabel *billMedia_value=new QLabel();//票据类型
         billMedia_value->setObjectName("item_title");
         QLabel *billNo_value=new QLabel();//票号
@@ -55,8 +57,6 @@ void bill_list_widget::initWidget(QList<QVariant>& list)
         foreach (auto ex_item, exceptionList) {
             QLabel *billListEx_item=new QLabel();//异常值
             billListEx_item->setObjectName("ex_label");
-            billListEx_item->setMidLineWidth(85);
-            billListEx_item->setMinimumHeight(20);
             billListEx_item->setAlignment(Qt::AlignCenter);
             QMap<QString,QVariant> ex_map=ex_item.toMap();
             QString exceDictValue=ex_map.value("exceDictValue").toString();
@@ -103,14 +103,7 @@ void bill_list_widget::initWidget(QList<QVariant>& list)
 
         grid->addWidget(exWidget,8,1,1,4,Qt::AlignLeft);
         //样式-》全局
-        content->setStyleSheet("#list_item"
-                               "{background-color:white;font-family:HanSans;max-height:300px}"
-                               "#item_key"
-                               "{color:'#C7C7C7';font-size:12px;}"
-                               "#item_title"
-                               "{font-size:15px;color:'"+isBankType+"';font-weight:bold}"
-                                "#ex_label"
-                               "{color:white;border-radius:2px;padding:0px 5px}");
+        content->setStyleSheet("#item_title{font-size:15px;color:'"+isBankType+"';font-weight:bold}");
         content->setLayout(grid);
         layout->addWidget(content,0,Qt::AlignTop);
     }
