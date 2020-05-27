@@ -242,6 +242,8 @@ bool CorePageWindow::eventFilter(QObject *obj, QEvent *event)
                 pageNo=1;
                 pageSize=5;
                 searchContent="";
+               QLineEdit *editer= ui->list_top->findChild<QLineEdit*>("searchContent");
+               editer->setText("");
                 getListPage();
                 return true;
             }
@@ -257,7 +259,6 @@ bool CorePageWindow::eventFilter(QObject *obj, QEvent *event)
     }
     if(obj->objectName()=="searchContent"){//搜索框enter事件
         if (event->type() == QEvent::KeyRelease||event->type() == QEvent::FocusIn){
-            //QInputMethod *inputEvent = dynamic_cast<QInputMethod*>(event);
             QLineEdit *s=qobject_cast<QLineEdit*>(obj);
             this->searchContent=s->text();
             qDebug()<<searchContent;

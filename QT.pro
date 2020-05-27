@@ -77,7 +77,7 @@ OBJECTS_DIR  = tmp
 MOC_DIR      = tmp
 
 #自己添加的第三方c++库地址
-INCLUDEPATH += $$quote(E:/OpenSSL-Win32/include)
-LIBS +=$$quote(E:/OpenSSL-Win32/lib/libcrypto.lib)
-LIBS +=$$quote(E:/OpenSSL-Win32/lib/libssl.lib)
+INCLUDEPATH += $$quote(D:/OpenSSL-Win32/include)
+LIBS +=$$quote(D:/OpenSSL-Win32/lib/libcrypto.lib)
+LIBS +=$$quote(D:/OpenSSL-Win32/lib/libssl.lib)
 
