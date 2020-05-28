@@ -11,6 +11,7 @@
 #include <QScrollArea>
 #include <QApplication>
 #include "./src/MaskWindow.h"
+#include "components/CustomerDialog.h"
 namespace Ui {
 class CorePageWindow;
 }
@@ -30,6 +31,9 @@ public:
 private:
     Ui::CorePageWindow *ui;
     MaskWindow *mask;
+    void appClose();
+    void appMinimze();
+    CustomerDialog *dalog;
 public slots:
    void searchBoxEnter();
 protected:

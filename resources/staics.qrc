@@ -17,5 +17,7 @@
         <file>img/icon-refresh.png</file>
         <file>img/loading.gif</file>
         <file>qss/mask.qss</file>
+        <file>qss/dialog.qss</file>
+        <file>img/logo.ico</file>
     </qresource>
 </RCC>

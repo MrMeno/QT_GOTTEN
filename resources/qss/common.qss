@@ -1,3 +1,4 @@
+/*窗体公共样式*/
 #LoginWindow{
 background-color:transparent;
 }
@@ -7,23 +8,7 @@ background-color:transparent;
 #centralwidget{
 background-color:transparent;
 }
-#title{
-background-color:rgba(20,20,20,0.5);
-border-top-left-radius:5px;
-border-top-right-radius:5px;
-}
-#title:hover{
-background-color:rgba(20,20,20,0.8);
-}
-#title>#icon_close{
-background-image:url(":/img/icon_close.png");
-background-repeat:no-repeat;
-}
-#title>#icon_min{
-background-image:url(":/img/icon_remove.png");
-background-repeat:no-repeat;
-}
-
+/*滚动条样式*/
 QScrollArea{
     border: 0px solid;
     border-right-width: 1px;
@@ -61,3 +46,67 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
     width: 0px;
     height: 0px;
 }
+
+/*弹窗样式*/
+#title{
+background-color:rgba(20,20,20,0.5);
+border-top-left-radius:5px;
+border-top-right-radius:5px;
+}
+#title:hover{
+background-color:rgba(20,20,20,0.8);
+}
+#title>#icon_close{
+background-image:url(":/img/icon_close.png");
+background-repeat:no-repeat;
+position:absolute;
+right:10px;
+}
+#title>#icon_min{
+background-image:url(":/img/icon_remove.png");
+background-repeat:no-repeat;
+position:absolute;
+right:30px;
+}
+#dialog_content{
+ background-color:white;
+}
+#dialog_footer{
+background-color:rgba(20,20,20,0.5);
+border-bottom-left-radius:5px;
+border-bottom-right-radius:5px;
+}
+#dialog_footer:hover{
+background-color:rgba(20,20,20,0.8);
+}
+#title_text{
+color:white;
+height:20px;
+}
+#title_logo{
+ width:20px;
+ height:20px;
+}
+#yesBtn,#noBtn{
+width:100px;
+height:32px;
+border-radius:5px;
+border-width:1px;
+border-color:black;
+color:black;
+background-color:white;
+}
+#yesBtn,#noBtn:hover{
+width:100px;
+height:32px;
+border-color:#2DD1AC;
+border-width:2px;
+border-radius:5px;
+color:#2DD1AC;
+background-color:white;
+}
+#contentText{
+max-width:150px;
+height:auto;
+}
+

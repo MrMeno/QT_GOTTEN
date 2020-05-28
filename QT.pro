@@ -37,7 +37,8 @@ SOURCES += \
     util\httpService.cpp \
     util\shdocvw.cpp \
     util/service/bankConfirmService.cpp \
-    util/ScreenCaputredEvent.cpp
+    util/ScreenCaputredEvent.cpp \
+    components/CustomerDialog.cpp
 
 HEADERS += \
     components\bill_list_widget.h \
@@ -55,12 +56,14 @@ HEADERS += \
     util\httpService.h \
     util\shdocvw.h \
     util/service/bankConfirmService.h \
-    util/ScreenCaputredEvent.h
+    util/ScreenCaputredEvent.h \
+    components/CustomerDialog.h
 
 FORMS += \
     src/MaskWindow.ui \
     src\CorePageWindow.ui \
     src\LoginWindow.ui \
+    components/CustomerDialog.ui
 
 TRANSLATIONS += \
     QT_zh_CN.ts

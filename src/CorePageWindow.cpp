@@ -54,7 +54,9 @@ void CorePageWindow::topInit(){
     QLabel *divLabel=new QLabel();//分隔
     divLabel->setObjectName("divLabel");
     QLabel *closeLabel=new QLabel();//关闭
+    closeLabel->setObjectName("closeLabel");
     QLabel *minLabel=new QLabel();//最小化
+    minLabel->setObjectName("minLabel");
     QLabel *userNameLabel=new QLabel();//用户名
     userNameLabel->setObjectName("userNameLabel");
     QLabel *orgLabel=new QLabel();//机构名称
@@ -80,10 +82,12 @@ void CorePageWindow::topInit(){
     QLineEdit *searchBox=new QLineEdit();//搜索框
     searchBox->setObjectName("searchContent");
     //事件绑定
-      ticketLftBtn->installEventFilter(this);
-      searchBox->installEventFilter(this);
-      refresh->installEventFilter(this);
-      QObject::connect(searchBox,SIGNAL(returnPressed()),this,SLOT(searchBoxEnter()));
+    ticketLftBtn->installEventFilter(this);
+    searchBox->installEventFilter(this);
+    refresh->installEventFilter(this);
+    closeLabel->installEventFilter(this);
+    QObject::connect(searchBox,SIGNAL(returnPressed()),this,SLOT(searchBoxEnter()));
+
     //数据绑定
     QImage *lo=new QImage(20,20,QImage::Format_RGB32);
     if(lo->load(":/img/logo.png")){
@@ -273,11 +277,41 @@ bool CorePageWindow::eventFilter(QObject *obj, QEvent *event)
             QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event); // 事件转换
             if(mouseEvent->button() == Qt::LeftButton)
             {
-                 mask=new MaskWindow(this);
-                 mask->show();
-                 CorePageWindow::setVisibility(false);
+                mask=new MaskWindow(this);
+                mask->show();
+                CorePageWindow::setVisibility(false);
             }
             return true;
+        }
+        else{
+            return false;
+        }
+    }
+    if(obj->objectName()=="closeLabel"){//关闭事件
+        if (event->type() == QEvent::MouseButtonPress) //鼠标点击
+        {
+            QJsonObject *config=new QJsonObject();
+            config->insert("contentText","确定退出？");
+            config->insert("yesBtnText","退出");
+            config->insert("noBtnText","不退出，最小化");
+            config->insert("titleText","提示");
+            dalog=new CustomerDialog(this,config,4);
+            dalog->exec();
+            if(dalog->result()==1){
+                appClose();
+            }
+            else{
+                appMinimze();
+            }
+        }
+        else{
+            return false;
+        }
+    }
+    if(obj->objectName()=="minLabel"){//最小化事件
+        if (event->type() == QEvent::MouseButtonPress) //鼠标点击
+        {
+            appMinimze();
         }
         else{
             return false;
@@ -290,13 +324,18 @@ bool CorePageWindow::eventFilter(QObject *obj, QEvent *event)
    设置状态栏位置
 */
 void CorePageWindow::setVisibility(bool isShow){
-     this->setVisible(isShow);
+    this->setVisible(isShow);
 }
 void CorePageWindow::setStatusBar(QStatusBar *st){
     st->resize(this->width()-20,22);
     st->move(0,this->height()-18);
 }
-
+void CorePageWindow::appClose(){
+    QApplication::quit();
+}
+void CorePageWindow::appMinimze(){
+    this->minimumSize();
+}
 CorePageWindow::~CorePageWindow()
 {
     delete ui;

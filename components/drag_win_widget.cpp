@@ -1,11 +1,9 @@
 #include "drag_win_widget.h"
 #include <QDebug>
+#include <QObject>
 drag_win_widget::drag_win_widget(QWidget *parent):QWidget(parent)
 {
      father= parent;
-
-
-
 }
 void drag_win_widget::mousePressEvent(QMouseEvent *event){
     //当鼠标左键点击时.

@@ -60,7 +60,7 @@ void LoginWindow::httpLogin(){
         QScriptValue userName=data.property("userName");
         QScriptValue orgName=data.property("orgName");
         USERNAME=userName.toString();
-         ORGNAME=orgName.toString();
+        ORGNAME=orgName.toString();
         if(code.toString()==CODE_SUCCESS){
             cp=new CorePageWindow(this);
             cp->show();
