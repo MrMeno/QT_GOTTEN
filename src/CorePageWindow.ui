@@ -39,8 +39,8 @@
   </property>
   <property name="windowIcon">
    <iconset resource="../resources/staics.qrc">
-    <normaloff>:/img/logo.png</normaloff>
-    <normalon>:/img/logo.png</normalon>:/img/logo.png</iconset>
+    <normaloff>:/img/logo.ico</normaloff>
+    <normalon>:/img/logo.ico</normalon>:/img/logo.ico</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
    <property name="minimumSize">

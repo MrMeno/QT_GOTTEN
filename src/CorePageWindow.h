@@ -12,6 +12,8 @@
 #include <QApplication>
 #include "./src/MaskWindow.h"
 #include "components/CustomerDialog.h"
+#include <QSystemTrayIcon>
+#include <components/system_tray.h>
 namespace Ui {
 class CorePageWindow;
 }
@@ -26,16 +28,27 @@ public:
     int pageNo;
     QString searchContent;
     void setVisibility(bool isShow);
+    void setSystemTray();
     bool eventFilter(QObject *obj, QEvent *event);
+    void createActions();
+    void createMenu();
+    void setTopWindow();
     ~CorePageWindow();
 private:
     Ui::CorePageWindow *ui;
     MaskWindow *mask;
     void appClose();
     void appMinimze();
+    QMenu *mMenu;
+    QAction *mShowMainAction;
+    QAction *mExitAppAction;
     CustomerDialog *dalog;
+    QSystemTrayIcon *trayIcon;
 public slots:
-   void searchBoxEnter();
+    void searchBoxEnter();
+    void on_activatedTrayIcon(QSystemTrayIcon::ActivationReason reason);
+    void on_showMainAction();
+    void on_exitAppAction();
 protected:
     void resizeEvent(QResizeEvent *event) override;
     void paintEvent(QPaintEvent *event);

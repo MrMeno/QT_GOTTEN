@@ -1,4 +1,4 @@
-#设置项目依赖核心类库，既QT对应安装目录下/include的两个类库文件夹
+#设置项目依赖核心类库，既QT对应安装目录下\include的两个类库文件夹
 QT       += core gui network sql script axcontainer
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
@@ -24,7 +24,7 @@ SOURCES += \
     components\bill_list_widget.cpp \
     main.cpp \
     components\close_label_btn.cpp \
-    src/MaskWindow.cpp \
+    src\MaskWindow.cpp \
            src\CorePageWindow.cpp \
            src\LoginWindow.cpp \
     util\DllHelper.cpp \
@@ -36,14 +36,15 @@ SOURCES += \
     components\drag_win_widget.cpp \
     util\httpService.cpp \
     util\shdocvw.cpp \
-    util/service/bankConfirmService.cpp \
-    util/ScreenCaputredEvent.cpp \
-    components/CustomerDialog.cpp
+    util\service\bankConfirmService.cpp \
+    util\ScreenCaputredEvent.cpp \
+    components\CustomerDialog.cpp \
+    components/system_tray.cpp
 
 HEADERS += \
     components\bill_list_widget.h \
     components\close_label_btn.h \
-    src/MaskWindow.h \
+    src\MaskWindow.h \
            src\LoginWindow.h \
            src\CorePageWindow.h \
     util\DllHelper.h \
@@ -55,15 +56,16 @@ HEADERS += \
     components\drag_win_widget.h \
     util\httpService.h \
     util\shdocvw.h \
-    util/service/bankConfirmService.h \
-    util/ScreenCaputredEvent.h \
-    components/CustomerDialog.h
+    util\service\bankConfirmService.h \
+    util\ScreenCaputredEvent.h \
+    components\CustomerDialog.h \
+    components/system_tray.h
 
 FORMS += \
-    src/MaskWindow.ui \
+    src\MaskWindow.ui \
     src\CorePageWindow.ui \
     src\LoginWindow.ui \
-    components/CustomerDialog.ui
+    components\CustomerDialog.ui
 
 TRANSLATIONS += \
     QT_zh_CN.ts

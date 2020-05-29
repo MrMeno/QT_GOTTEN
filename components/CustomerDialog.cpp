@@ -23,6 +23,7 @@ CustomerDialog::CustomerDialog(QWidget *parent,QJsonObject *config,int type) :
     ui->title_logo->setPixmap(bgImage.scaled(ui->title_logo->size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
       uiFormat(type,**&config);
     ui->icon_close->installEventFilter(this);
+    ui->icon_close->setCursor(Qt::PointingHandCursor);
 }
 void CustomerDialog::uiFormat(int type,QJsonObject config){
     PublicHelper *helper=new PublicHelper();
@@ -105,6 +106,7 @@ bool CustomerDialog::eventFilter(QObject *obj, QEvent *event){
             if(mouseEvent->button() == Qt::LeftButton)
             {
                 this->reject();
+                this->setResult(3);
                 return true;
             }
             else

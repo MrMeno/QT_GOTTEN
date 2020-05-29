@@ -32,9 +32,9 @@
    <string>小ai签票</string>
   </property>
   <property name="windowIcon">
-   <iconset>
-    <normalon>:/img/logo.png</normalon>
-   </iconset>
+   <iconset resource="../resources/staics.qrc">
+    <normaloff>:/img/logo.ico</normaloff>
+    <normalon>:/img/logo.png</normalon>:/img/logo.ico</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QFrame" name="content_frame">
@@ -185,17 +185,19 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>Mylabel</class>
-   <extends>QLabel</extends>
-   <header location="global">components/close_label_btn.h</header>
-  </customwidget>
-  <customwidget>
    <class>drag_win_widget</class>
    <extends>QWidget</extends>
    <header location="global">components/drag_win_widget.h</header>
    <container>1</container>
   </customwidget>
+  <customwidget>
+   <class>Mylabel</class>
+   <extends>QLabel</extends>
+   <header location="global">components/close_label_btn.h</header>
+  </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="../resources/staics.qrc"/>
+ </resources>
  <connections/>
 </ui>

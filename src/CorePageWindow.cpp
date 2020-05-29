@@ -17,21 +17,28 @@
 #include <QLineEdit>
 #include <QMovie>
 #include <QKeyEvent>
+#include <QMenu>
+#include <QEvent>
+#include <QDesktopServices>
+#include <QUrl>
 
 
 CorePageWindow::CorePageWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::CorePageWindow)
 {
-    this->setWindowFlags(Qt::FramelessWindowHint|windowFlags()|Qt::WindowStaysOnTopHint);
+    this->setWindowFlags(Qt::FramelessWindowHint|windowFlags()|Qt::Tool);
     this->setAttribute(Qt::WA_TranslucentBackground);
+    this->setWindowIcon(QIcon(":/img/logo.ico"));
     ui->setupUi(this);
     this->pageNo=1;
     this->pageSize=5;
     this->searchContent="";
     this->setStatusBar(ui->statusBar);
-    topInit();
-    getListPage();
+    setSystemTray();//设置系统托盘
+    topInit();//初始化头部
+
+    getListPage();//获取列表数据
 }
 /*
  * @
@@ -51,18 +58,22 @@ void CorePageWindow::topInit(){
     QLabel *homeLabel=new QLabel();//home
     QLabel *setLabel=new QLabel();//设置
     QLabel *topLabel=new QLabel();//置顶
+    topLabel->setObjectName("topLabel");
     QLabel *divLabel=new QLabel();//分隔
     divLabel->setObjectName("divLabel");
     QLabel *closeLabel=new QLabel();//关闭
     closeLabel->setObjectName("closeLabel");
     QLabel *minLabel=new QLabel();//最小化
     minLabel->setObjectName("minLabel");
+    minLabel->setToolTip("最小化");
     QLabel *userNameLabel=new QLabel();//用户名
+    userNameLabel->setToolTip("用户名");
     userNameLabel->setObjectName("userNameLabel");
     QLabel *orgLabel=new QLabel();//机构名称
     orgLabel->setObjectName("orgLabel");
     QLabel *orgDivLabel=new QLabel();//机构名称分隔
     QPushButton *ticketLftBtn=new QPushButton("添加票面",this);
+     ticketLftBtn->setToolTip("添加票面");
     ticketLftBtn->setObjectName("ticketLftBtn");
     QIcon up(":/img/arrow-up.png");
     QIcon down(":/img/arrow-down.png");
@@ -80,25 +91,29 @@ void CorePageWindow::topInit(){
     QPushButton *refresh=new QPushButton(fresh,"",this);//刷新按钮
     refresh->setObjectName("refresh");
     QLineEdit *searchBox=new QLineEdit();//搜索框
+    searchBox->setToolTip("Enter键搜索");
+    searchBox->setPlaceholderText("请输入票号查询");
     searchBox->setObjectName("searchContent");
     //事件绑定
     ticketLftBtn->installEventFilter(this);
     searchBox->installEventFilter(this);
     refresh->installEventFilter(this);
     closeLabel->installEventFilter(this);
+    minLabel->installEventFilter(this);
     QObject::connect(searchBox,SIGNAL(returnPressed()),this,SLOT(searchBoxEnter()));
 
     //数据绑定
-    QImage *lo=new QImage(20,20,QImage::Format_RGB32);
-    if(lo->load(":/img/logo.png")){
-        imgLabel->setMaximumSize(48,48);
-        imgLabel->setPixmap(QPixmap::fromImage(*lo));
+     QPixmap lo;
+    if(lo.load(":/img/logo.ico")){
+        imgLabel->setMaximumSize(20,20);
+         imgLabel->setPixmap(lo.scaled(imgLabel->size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
         imgLabel->setScaledContents(true);
     }
     QImage *lo_home=new QImage(16,16,QImage::Format_RGB32);
     if(lo_home->load(":/img/icon-home.png")){
         homeLabel->setMaximumSize(16,16);
         homeLabel->setPixmap(QPixmap::fromImage(*lo_home));
+        homeLabel->setToolTip(u8"客户端每日24：00将自动清除当天数据\r\n若需要票据信息可到管理后台查询");
         homeLabel->setScaledContents(true);
     }
     QImage *lo_set=new QImage(16,16,QImage::Format_RGB32);
@@ -143,18 +158,21 @@ void CorePageWindow::topInit(){
     //样式调整
     refresh->setCursor(Qt::PointingHandCursor);
     minLabel->setCursor(Qt::PointingHandCursor);
+    setLabel->setCursor(Qt::PointingHandCursor);
+    topLabel->setCursor(Qt::PointingHandCursor);
     closeLabel->setCursor(Qt::PointingHandCursor);
+     homeLabel->setCursor(Qt::PointingHandCursor);
     ticketLftBtn->setCursor(Qt::PointingHandCursor);
     //控件排版
     topLayout->setVerticalSpacing(10);
     topLayout->setHorizontalSpacing(0);
-    topLayout->addWidget(imgLabel,1,1,1,1,Qt::AlignRight);//row1
+    topLayout->addWidget(imgLabel,1,1,1,1,Qt::AlignLeft);//row1
     topLayout->addWidget(titleLabel,1,2,1,2,Qt::AlignLeft);
     topLayout->addWidget(homeLabel,1,7,1,2,Qt::AlignCenter);
     topLayout->addWidget(setLabel,1,8,1,2,Qt::AlignCenter);
     topLayout->addWidget(topLabel,1,9,1,2,Qt::AlignCenter);
     topLayout->addWidget(divLabel,1,10,1,2,Qt::AlignCenter);
-    topLayout->addWidget(minLabel,1,11,1,2,Qt::AlignRight);
+    topLayout->addWidget(minLabel,1,11,1,2,Qt::AlignCenter);
     topLayout->addWidget(closeLabel,1,12,1,2,Qt::AlignRight);
     topLayout->addWidget(userNameLabel,3,1,1,3,Qt::AlignVCenter);//row2
     topLayout->addWidget(ticketLftBtn,3,8,2,3,Qt::AlignBottom|Qt::AlignRight);//row3+4
@@ -210,7 +228,6 @@ void CorePageWindow::getListPage(){
 */
 void CorePageWindow::resizeEvent(QResizeEvent *event){
     QSize size=this->size();
-
     ui->content_core_frame->resize(size.width()-45,size.height()-40);
     QSize frame_size=ui->content_core_frame->size();
     ui->list_content->resize(frame_size.width(),frame_size.height()-220);
@@ -220,7 +237,6 @@ void CorePageWindow::resizeEvent(QResizeEvent *event){
     ui->statusBar->move(0,frame_size.height()-8);
 }
 void CorePageWindow::searchBoxEnter(){
-
     getListPage();
 }
 /*
@@ -297,10 +313,11 @@ bool CorePageWindow::eventFilter(QObject *obj, QEvent *event)
             config->insert("titleText","提示");
             dalog=new CustomerDialog(this,config,4);
             dalog->exec();
+            qDebug()<<dalog->result();
             if(dalog->result()==1){
                 appClose();
             }
-            else{
+            else if(dalog->result()==0){
                 appMinimze();
             }
         }
@@ -317,6 +334,15 @@ bool CorePageWindow::eventFilter(QObject *obj, QEvent *event)
             return false;
         }
     }
+    if(obj->objectName()=="topLabel"){//置顶
+        if (event->type() == QEvent::MouseButtonPress) //鼠标点击
+        {
+            this->setWindowFlags(Qt::WindowStaysOnTopHint);
+        }
+        else{
+            return false;
+        }
+    }
     return false;
 }
 /*
@@ -326,6 +352,63 @@ bool CorePageWindow::eventFilter(QObject *obj, QEvent *event)
 void CorePageWindow::setVisibility(bool isShow){
     this->setVisible(isShow);
 }
+void CorePageWindow::setSystemTray(){
+ trayIcon = new QSystemTrayIcon(this);
+ trayIcon->setObjectName("systemTray");
+ QIcon icon = QIcon(":/img/logo.ico");
+ trayIcon->setIcon(icon);
+ trayIcon->setToolTip("小ai签票");
+ connect(trayIcon,SIGNAL(activated(QSystemTrayIcon::ActivationReason)),this,SLOT(on_activatedTrayIcon(QSystemTrayIcon::ActivationReason)));
+ createActions();
+ createMenu();
+ trayIcon->show();
+
+
+}
+
+void CorePageWindow::on_activatedTrayIcon(QSystemTrayIcon::ActivationReason reason){
+    switch(reason){
+        case QSystemTrayIcon::Trigger:
+            this->show();
+            break;
+        case QSystemTrayIcon::DoubleClick:
+            this->show();
+            break;
+
+        default:
+            break;
+        }
+}
+void CorePageWindow::createActions()
+{
+    mShowMainAction = new QAction(QObject::trUtf8("显示主界面"),this);
+    connect(mShowMainAction,SIGNAL(triggered()),this,SLOT(on_showMainAction()));
+
+    mExitAppAction = new QAction(QObject::trUtf8("退出"),this);
+    connect(mExitAppAction,SIGNAL(triggered()),this,SLOT(on_exitAppAction()));
+
+}
+
+void CorePageWindow::createMenu()
+{
+    mMenu = new QMenu(this);
+    //新增菜单项---显示主界面
+    mMenu->addAction(mShowMainAction);
+    //增加分隔符
+    mMenu->addSeparator();
+    //新增菜单项---退出程序
+    mMenu->addAction(mExitAppAction);
+    //把QMenu赋给QSystemTrayIcon对象
+    trayIcon->setContextMenu(mMenu);
+}
+void CorePageWindow::on_showMainAction()
+{
+    this->show();
+}
+void CorePageWindow::on_exitAppAction()
+{
+    exit(0);
+}
 void CorePageWindow::setStatusBar(QStatusBar *st){
     st->resize(this->width()-20,22);
     st->move(0,this->height()-18);
@@ -334,8 +417,21 @@ void CorePageWindow::appClose(){
     QApplication::quit();
 }
 void CorePageWindow::appMinimze(){
-    this->minimumSize();
+   this->hide();
+
 }
+void CorePageWindow::setTopWindow()
+{
+    Qt::WindowStates winStatus = Qt::WindowNoState;
+    if (windowState() & Qt::WindowMaximized)
+    {
+        winStatus = Qt::WindowMaximized;
+    }
+    setWindowState(Qt::WindowActive | winStatus);
+    activateWindow();
+    raise();
+}
+
 CorePageWindow::~CorePageWindow()
 {
     delete ui;

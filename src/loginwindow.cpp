@@ -22,7 +22,7 @@ LoginWindow::LoginWindow(QWidget *parent) :
 
     this->setWindowFlags(Qt::FramelessWindowHint|windowFlags()| Qt::WindowStaysOnTopHint);
     this->setAttribute(Qt::WA_TranslucentBackground);
-
+    this->setWindowIcon(QIcon(":/img/logo.ico"));
     QGraphicsDropShadowEffect *shadowEffect = new QGraphicsDropShadowEffect();
     shadowEffect->setBlurRadius(10);	//设置圆角半径 像素
     shadowEffect->setColor(Qt::black);	// 设置边框颜色

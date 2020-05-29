@@ -109,4 +109,39 @@ background-color:white;
 max-width:150px;
 height:auto;
 }
+/*自定义系统托盘*/
+QMenu{
+    background:white;
+    border:1px solid lightgray;
+}
 
+QMenu::item{
+    padding:0px 20px 0px 20px;
+    margin-left: 5px;
+    height:25px;
+}
+
+QMenu::item:selected:enabled{
+    background: lightgray;
+    color: white;
+}
+
+QMenu::separator{
+    height:1px;
+    background: lightgray;
+    margin:2px 0px 2px 0px;
+}
+
+QMenu::item:selected:!enabled{
+    background:transparent;
+}
+
+QPushButton#TrayButton {
+    border: none;
+    background: transparent;
+}
+
+QPushButton#TrayButton:hover {
+    background: rgb(233, 237, 252);
+    color: rgb(42, 120, 192);
+}

@@ -26,7 +26,7 @@ void MaskWindow::mouseDoubleClickEvent(QMouseEvent* event)
 {
     HWND deskHD=::GetDesktopWindow();//顶层蒙版的句柄
     HWND S=::GetWindow(deskHD,5);//顶层蒙版的句柄
-     this->close();
+    this->close();
     getDocument(S);
     CorePageWindow *cp=static_cast<CorePageWindow*>(pIndow);
     cp->setVisibility(true);
