@@ -17,7 +17,7 @@ class MaskWindow : public QMainWindow
 
 public:
       explicit MaskWindow(QWidget *parent = nullptr);
-     void getDocument(HWND hwnd);
+     void getDocument(HWND hwnd,QPoint sp);
     ~MaskWindow();
 public slots:
     void getData(int timeSecond,QSize size);

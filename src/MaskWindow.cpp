@@ -19,7 +19,7 @@ MaskWindow::MaskWindow(QWidget *parent) :
     this->setFocus();
     pIndow=parent;
     connect(src,SIGNAL(sendData(int,QSize)), this, SLOT(getData(int,QSize)));
-   // connect(this,SIGNAL(mouseDoubleClickEvent(QMouseEvent *event)), this, SLOT(getDocument(QMouseEvent *event)));
+    // connect(this,SIGNAL(mouseDoubleClickEvent(QMouseEvent *event)), this, SLOT(getDocument(QMouseEvent *event)));
 }
 
 void MaskWindow::mouseDoubleClickEvent(QMouseEvent* event)
@@ -27,7 +27,8 @@ void MaskWindow::mouseDoubleClickEvent(QMouseEvent* event)
     HWND deskHD=::GetDesktopWindow();//顶层蒙版的句柄
     HWND S=::GetWindow(deskHD,5);//顶层蒙版的句柄
     this->close();
-    getDocument(S);
+    QPoint _sp=event->globalPos();
+    getDocument(S,_sp);
     CorePageWindow *cp=static_cast<CorePageWindow*>(pIndow);
     cp->setVisibility(true);
 
@@ -37,9 +38,13 @@ void MaskWindow::getData(int Second,QSize s){
     size=s;
 
 }
-void MaskWindow::getDocument(HWND hwnd){
-     HWND M=::GetWindow(hwnd,2);
-     qDebug()<<(int)M;
+void MaskWindow::getDocument(HWND hwnd,QPoint sp){
+    HWND M=::GetWindow(hwnd,2);
+     POINT _p;
+    _p.x=sp.x();
+    _p.y=sp.y();
+    HWND T=::WindowFromPoint(_p);
+    qDebug()<<(int)M<<(int)T;
 }
 MaskWindow::~MaskWindow()
 {
